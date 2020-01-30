@@ -1,36 +1,84 @@
 package com.example.YogaProject.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Activity {
+    public Activity(String name, String tag, Integer capacity, LocalDateTime dateTime, BigDecimal price, Boolean isAvailable, User mentor, ActivityType activityType, Lounge lounge, List<User> users) {
+        this.name = name;
+        this.tag = tag;
+        this.capacity = capacity;
+        this.dateTime = dateTime;
+        this.price = price;
+        this.isAvailable = isAvailable;
+        this.mentor = mentor;
+        this.activityType = activityType;
+        this.lounge = lounge;
+        this.users = users;
+    }
+
+    public Activity() {
+    }
+
+    public Activity(String name, String tag) {
+        this.name = name;
+        this.tag = tag;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @Column(name = "activity_id")
+    private Long id;
 
     private String name;
+    private String tag;
     private Integer capacity;
-    private List<Person> clients;
-    private Set<Person> mentors;
-    private Lounge lounge;
-    private ActivityType activityType;
     private LocalDateTime dateTime;
     private BigDecimal price;
     private Boolean isAvailable;
 
-    public Integer getId() {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mentor_id")
+    private User mentor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "activity_type_id")
+    private ActivityType activityType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lounge_id")
+    private Lounge lounge;
+
+    @ManyToMany
+    @JoinTable(
+            name = "activity_users",
+            joinColumns = { @JoinColumn(name = "activity_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
+    private List<User> users = new ArrayList<>();
+
+    public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public void setName(String name) {
@@ -45,20 +93,20 @@ public class Activity {
         this.capacity = capacity;
     }
 
-    public List<Person> getClients() {
-        return clients;
+    public List<User> getUsers() {
+            return users;
     }
 
-    public void setClients(List<Person> clients) {
-        this.clients = clients;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
-    public Set<Person> getMentors() {
-        return mentors;
+    public User getMentor() {
+        return mentor;
     }
 
-    public void setMentors(Set<Person> mentors) {
-        this.mentors = mentors;
+    public void setMentor(User mentor) {
+        this.mentor = mentor;
     }
 
     public Lounge getLounge() {

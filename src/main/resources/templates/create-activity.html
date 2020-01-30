@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Create activity</title>
+</head>
+<body>
+<form action="#" th:action="@{/create-activity}" method="post">
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" placeholder="Name">
+    <label for="tag">Tag</label>
+    <input type="text" name="tag" id="tag" placeholder="Tag">
+    <input type="submit" value="Create Activity">
+</form>
+</body>
+</html>

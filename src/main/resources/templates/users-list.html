@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+<div>
+    <h3>Find Users by lastname</h3>
+    <form method="post" action="/users/filter">
+        <input type="text" name="lastName">
+        <button type="submit">Найти</button>
+    </form>
+</div>
+<div >
+    <h2>Clients</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>User ID</th>
+            <th>First Name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <th>Birthday</th>
+            <th>Phone number</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getId()}"></td>
+            <td th:text="${user.getFirstName()}"></td>
+            <td th:text="${user.getLastName()}"></td>
+            <td th:text="${user.getEmail()}"></td>
+            <td th:text="${user.getBirth()}"></td>
+            <td th:text="${user.getPhoneNumber()}"></td>
+            <td><a th:href="@{update-user/{id}(id=${user.getId()})}">Edit</a></td>
+            <td><a th:href="@{delete-user/{id}(id=${user.getId()})}">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<p><a href="/create-user">Create user</a></p>
+</div>
+</body>
+</html>

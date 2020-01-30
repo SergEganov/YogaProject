@@ -1,7 +1,10 @@
 package com.example.YogaProject.repos;
 
 import com.example.YogaProject.domain.Activity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ActivityRepo extends CrudRepository<Activity, Integer> {
+import java.util.List;
+
+public interface ActivityRepo extends JpaRepository <Activity, Long> {
+    List<Activity> findByTag(String tag);
 }

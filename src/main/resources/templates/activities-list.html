@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Activities</title>
+</head>
+<body>
+<div>
+    <h2>Find Activity by Tag!</h2>
+    <form method="post" action="/activities/filter">
+        <input type="text" name="filter">
+        <button type="submit">Найти</button>
+    </form>
+</div>
+<div >
+        <h2>Activities</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Tag</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="activity : ${activities}">
+                <td th:text="${activity.id}"></td>
+                <td th:text="${activity.name}"></td>
+                <td th:text="${activity.tag}"></td>
+                <td><a th:href="@{update-activity/{id}(id=${activity.id})}">Edit</a></td>
+                <td><a th:href="@{delete-activity/{id}(id=${activity.id})}">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a href="/create-activity">Create activity</a></p>
+</div>
+</body>
+</html>

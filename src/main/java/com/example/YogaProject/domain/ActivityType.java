@@ -6,9 +6,9 @@ import javax.persistence.*;
 @Table(name = "activity_types")
 public class ActivityType {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "activity_type_id")
-    private int id;
+    private Long id;
 
     @Column(name = "activity_type_name")
     private String name;
@@ -20,11 +20,11 @@ public class ActivityType {
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

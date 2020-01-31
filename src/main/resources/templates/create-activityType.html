@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Create activity type</title>
+</head>
+<body>
+<form action="#" th:action="@{/create-activityType}" th:object="${activityType}" method="post">
+    <label for="name">Name </label>
+    <input type="text" th:field="*{name}" id="name" placeholder="Name">
+    <input type="submit" value="Create activityType">
+</form>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Create lounge</title>
+</head>
+<body>
+<form action="#" th:action="@{/create-lounge}" th:object="${lounge}" method="post">
+    <label for="name">Name </label>
+    <input type="text" th:field="*{name}" id="name" placeholder="Name">
+    <label for="address">Address </label>
+    <input type="text" th:field="*{address}" id="address" placeholder="Address">
+    <label for="capacity">Capacity </label>
+    <input type="text" th:field="*{capacity}" id="capacity" placeholder="Capacity">
+
+    <select th:field="*{activityTypes}" >
+        <option th:each="activityType : ${activityTypes}"
+                th:value="${activityType.id}"
+                th:text="${activityType.name}">
+        </option>
+    </select>
+    <input type="submit" value="Create lounge">
+</form>
+</body>
+</html>

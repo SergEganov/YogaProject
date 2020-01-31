@@ -5,13 +5,6 @@
     <title>Activities</title>
 </head>
 <body>
-<div>
-    <h2>Find Activity by Tag!</h2>
-    <form method="post" action="/activities/filter">
-        <input type="text" name="filter">
-        <button type="submit">Найти</button>
-    </form>
-</div>
 <div >
         <h2>Activities</h2>
         <table>
@@ -20,6 +13,7 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Tag</th>
+                <th>ActivityType</th>
             </tr>
             </thead>
             <tbody>
@@ -27,6 +21,7 @@
                 <td th:text="${activity.id}"></td>
                 <td th:text="${activity.name}"></td>
                 <td th:text="${activity.tag}"></td>
+                <td th:text="${activity.activityType.name}"></td>
                 <td><a th:href="@{update-activity/{id}(id=${activity.id})}">Edit</a></td>
                 <td><a th:href="@{delete-activity/{id}(id=${activity.id})}">Delete</a></td>
             </tr>

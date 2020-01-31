@@ -1,5 +1,6 @@
 package com.example.YogaProject.controllers;
 
+import com.example.YogaProject.domain.Activity;
 import com.example.YogaProject.domain.ActivityType;
 import com.example.YogaProject.service.ActivityTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class ActivityTypeController {
 
     @GetMapping("/create-activityType")
     public String createActivityTypeForm(Model model){
-        model.addAttribute(new ActivityType());
+        model.addAttribute("activityType", new ActivityType());
         return "create-activityType";
     }
 
@@ -40,7 +41,7 @@ public class ActivityTypeController {
         return "redirect:/activityTypes";
     }
 
-    @GetMapping("delete-activityType/{id}")
+    @GetMapping("/delete-activityType/{id}")
     public String deleteActivityType(@PathVariable("id") Long id){
         activityTypeService.deleteById(id);
         return "redirect:/activityTypes";

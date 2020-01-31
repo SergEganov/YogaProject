@@ -1,7 +1,6 @@
 package com.example.YogaProject.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +12,7 @@ public class Lounge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lounge_id")
-    private int id;
+    private Long id;
 
     @Column(name = "lounge_name")
     private String name;
@@ -42,11 +41,11 @@ public class Lounge {
     public Lounge() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

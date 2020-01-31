@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Lounges</title>
+</head>
+<body>
+<h2>Lounges</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Capacity</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lounge : ${lounges}">
+        <td th:text="${lounge.id}"></td>
+        <td th:text="${lounge.name}"></td>
+        <td th:text="${lounge.address}"></td>
+        <td th:text="${lounge.capacity}"></td>
+        <td><a th:href="@{/update-lounge/{id}(id=${lounge.id})}">Edit</a></td>
+        <td><a th:href="@{/delete-lounge/{id}(id=${lounge.id})}">Delete</a></td>
+    </tr>
+    </tbody>
+</table>
+</div>
+<p><a href="/create-lounge">Create lounge</a></p>
+</div>
+</body>
+</html>

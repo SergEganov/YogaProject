@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<meta charset="UTF-8">
+<title>Create user</title>
+</head>
+<body>
+<form action="#" th:action="@{/update-activityType}" th:object="${activityType}" method="post">
+    <label for="id">ID</label>
+    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
+    <br/>
+    <label for="name">Name</label>
+    <input type="text" th:field="*{name}" id="name" placeholder="Name">
+    <br/>
+    <input type="submit" value="Update event type">
+</form>
+</body>
+</html>

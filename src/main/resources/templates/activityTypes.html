@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Activity types</title>
+</head>
+<body>
+    <h2>Activity types</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="activityType : ${activityTypes}">
+                <td th:text="${activityType.id}"></td>
+                <td th:text="${activityType.name}"></td>
+                <td><a th:href="@{/update-activityType/{id}(id=${activityType.id})}">Edit</a></td>
+                <td><a th:href="@{/delete-activityType/{id}(id=${activityType.id})}">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <p><a href="/create-activityType">Create activity type</a></p>
+</div>
+</body>
+</html>

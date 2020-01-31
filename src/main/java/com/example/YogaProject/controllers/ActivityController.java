@@ -2,13 +2,13 @@ package com.example.YogaProject.controllers;
 
 import com.example.YogaProject.domain.Activity;
 import com.example.YogaProject.service.ActivityService;
+import com.example.YogaProject.service.ActivityTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -16,10 +16,12 @@ import java.util.List;
 public class ActivityController {
 
     private final ActivityService activityService;
+    private final ActivityTypeService activityTypeService;
 
     @Autowired
-    public ActivityController(ActivityService activityService) {
+    public ActivityController(ActivityService activityService, ActivityTypeService activityTypeService) {
         this.activityService = activityService;
+        this.activityTypeService = activityTypeService;
     }
 
     @GetMapping("/activities")
@@ -30,13 +32,14 @@ public class ActivityController {
     }
 
     @GetMapping("/create-activity")
-    public String createActivityForm(){
+    public String createActivityForm(Model model){
+        model.addAttribute("activityTypes", activityTypeService.findAll());
+        model.addAttribute("activity", new Activity());
         return "create-activity";
     }
 
     @PostMapping("/create-activity")
-    public String createActivity(@RequestParam String name, @RequestParam String tag) {
-        Activity activity = new Activity(name,tag);
+    public String createActivity(Activity activity) {
         activityService.saveActivity(activity);
         return "redirect:/activities";
     }
@@ -58,17 +61,5 @@ public class ActivityController {
     public String updateActivity(Activity activity){
         activityService.saveActivity(activity);
         return "redirect:/activities";
-    }
-
-    @PostMapping("/activities/filter")
-    public String filter(@RequestParam String filter, Model model) {
-        List<Activity> activities;
-        if(filter != null && !filter.isEmpty()) {
-            activities = activityService.findByTag(filter);
-        } else {
-            activities = activityService.findAll();
-        }
-        model.addAttribute("activities", activities);
-        return "activities-list";
     }
 }

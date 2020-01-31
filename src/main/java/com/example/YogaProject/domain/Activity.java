@@ -2,49 +2,43 @@ package com.example.YogaProject.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
+@Table(name = "activities")
 public class Activity {
-    public Activity(String name, String tag, Integer capacity, LocalDateTime dateTime, BigDecimal price, Boolean isAvailable, User mentor, ActivityType activityType, Lounge lounge, List<User> users) {
-        this.name = name;
-        this.tag = tag;
-        this.capacity = capacity;
-        this.dateTime = dateTime;
-        this.price = price;
-        this.isAvailable = isAvailable;
-        this.mentor = mentor;
-        this.activityType = activityType;
-        this.lounge = lounge;
-        this.users = users;
-    }
-
-    public Activity() {
-    }
-
-    public Activity(String name, String tag) {
-        this.name = name;
-        this.tag = tag;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "activity_id")
     private Long id;
 
+    @Column(name = "activity_name")
     private String name;
-    private String tag;
-    private Integer capacity;
-    private LocalDateTime dateTime;
-    private BigDecimal price;
-    private Boolean isAvailable;
 
+    @Column(name = "activity_tag")
+    private String tag;
+
+    @Column(name = "activity_capacity")
+    private Integer capacity;
+
+    @Column(name = "activity_time")
+    private LocalDateTime time;
+
+    @Column(name = "activity_date")
+    private LocalDate date;
+
+    @Column(name = "activity_price")
+    private BigDecimal price;
+
+    @Column(name = "available")
+    private Boolean isAvailable;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
-    private User mentor;
+    private UserEntity mentor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "activity_type_id")
@@ -57,10 +51,18 @@ public class Activity {
     @ManyToMany
     @JoinTable(
             name = "activity_users",
-            joinColumns = { @JoinColumn(name = "activity_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+            joinColumns = {@JoinColumn(name = "activity_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    private List<User> users = new ArrayList<>();
+    private Set<UserEntity> users = new HashSet<>();
+
+    public Activity() {
+    }
+
+    public Activity(String name, String tag) {
+        this.name = name;
+        this.tag = tag;
+    }
 
     public Long getId() {
         return id;
@@ -74,15 +76,16 @@ public class Activity {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getTag() {
         return tag;
     }
+
     public void setTag(String tag) {
         this.tag = tag;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getCapacity() {
@@ -93,44 +96,20 @@ public class Activity {
         this.capacity = capacity;
     }
 
-    public List<User> getUsers() {
-            return users;
+    public LocalDateTime getTime() {
+        return time;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 
-    public User getMentor() {
-        return mentor;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setMentor(User mentor) {
-        this.mentor = mentor;
-    }
-
-    public Lounge getLounge() {
-        return lounge;
-    }
-
-    public void setLounge(Lounge lounge) {
-        this.lounge = lounge;
-    }
-
-    public ActivityType getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(ActivityType activityType) {
-        this.activityType = activityType;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public BigDecimal getPrice() {
@@ -147,5 +126,37 @@ public class Activity {
 
     public void setAvailable(Boolean available) {
         isAvailable = available;
+    }
+
+    public UserEntity getMentor() {
+        return mentor;
+    }
+
+    public void setMentor(UserEntity mentor) {
+        this.mentor = mentor;
+    }
+
+    public ActivityType getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(ActivityType activityType) {
+        this.activityType = activityType;
+    }
+
+    public Lounge getLounge() {
+        return lounge;
+    }
+
+    public void setLounge(Lounge lounge) {
+        this.lounge = lounge;
+    }
+
+    public Set<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserEntity> users) {
+        this.users = users;
     }
 }

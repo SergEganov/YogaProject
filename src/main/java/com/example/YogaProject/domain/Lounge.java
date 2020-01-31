@@ -1,6 +1,7 @@
 package com.example.YogaProject.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
@@ -14,12 +15,19 @@ public class Lounge {
     @Column(name = "lounge_id")
     private int id;
 
+    @Column(name = "lounge_name")
     private String name;
+
+    @Column(name = "lounge_address")
     private String address;
+
+    @Column(name = "lounge_capacity")
     private int capacity;
+
+    @Column(name = "lounge_worktime")
     private Duration workTime;
 
-    @OneToMany(mappedBy = "lounge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "lounge", cascade = CascadeType.ALL)
     private List<Activity> activities;
 
     @ManyToMany
@@ -31,6 +39,8 @@ public class Lounge {
     private Set<ActivityType> activityTypes = new HashSet<>();
 
 
+    public Lounge() {
+    }
 
     public int getId() {
         return id;

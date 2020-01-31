@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "users_entities")
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,6 +14,9 @@ public class User {
     private Long id;
 
     @Column(name = "first_name")
+    /*@NotBlank
+    TODO Добавить аннотации @Valid в пост методы, разобраться как валидить int, data и тд
+    */
     private String firstName;
 
     @Column(name = "last_name")
@@ -23,6 +26,8 @@ public class User {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "birthday")
     private LocalDate birth;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -30,11 +35,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String firstName, String lastName, String email, String phoneNumber, LocalDate birth) {
+    public UserEntity(String firstName, String lastName, String email, String phoneNumber, LocalDate birth) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

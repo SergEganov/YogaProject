@@ -11,13 +11,39 @@
     <label for="name">Name</label>
     <input type="text" th:field="*{name}" id="name" placeholder="Name">
     <br/>
-    <label for="tag">Tag</label>
-    <input type="text" th:field="*{tag}" id="tag" placeholder="Tag">
+    <label for="capacity">Capacity </label>
+    <input type="number" th:field="*{capacity}" id="capacity" placeholder="Capacity">
     <br/>
-    <label for="activityType">Activity Type</label>
-    <input type="text" th:field="*{activityType.name}" id="activityType" placeholder="activityType">
+    <label for="start">Start </label>
+    <input type="datetime-local" name="start" id="start" placeholder="Start of activity">
+    <label for="finish">Finish </label>
+    <input type="datetime-local" name="finish" id="finish" placeholder="Finish of activity">
+    <br/>
+    <label for="price">Price</label>
+    <input type="number" th:field="*{price}" id="price" placeholder="Price">
+    <br/>
+    <label for="available">Available</label>
+    <input type="checkbox" th:field="*{available}" id="available" placeholder="Is available">
+    <br/>
+    <select th:field="*{activityType}">
+        <option th:each="activityType : ${activityTypes}"
+                th:value="${activityType.id}"
+                th:text="${activityType.name}">
+        </option>
+    </select>
+    <br/>
+    <select th:field="${activity.lounge}" >
+        <option th:each="lounge : ${lounges}"
+                th:value="${lounge.id}"
+                th:text="${lounge.name}">
+        </option>
+    </select>
     <br/>
     <input type="submit" value="Update Activity">
 </form>
+
+
+
+
 </body>
 </html>

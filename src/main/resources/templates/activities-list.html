@@ -12,16 +12,26 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Tag</th>
                 <th>ActivityType</th>
+                <th>Capacity</th>
+                <th>Start</th>
+                <th>Finish</th>
+                <th>Price</th>
+                <th>Available</th>
+                <th>Lounge</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="activity : ${activities}">
                 <td th:text="${activity.id}"></td>
                 <td th:text="${activity.name}"></td>
-                <td th:text="${activity.tag}"></td>
                 <td th:text="${activity.activityType.name}"></td>
+                <td th:text="${activity.capacity}"></td>
+                <td th:text="${activity.formattedData(activity.startDateTime)}"></td>
+                <td th:text="${activity.formattedData(activity.finishDateTime)}"></td>
+                <td th:text="${activity.price}"></td>
+                <td th:text="${activity.available}"></td>
+                <td th:text="${activity.lounge.name}"></td>
                 <td><a th:href="@{update-activity/{id}(id=${activity.id})}">Edit</a></td>
                 <td><a th:href="@{delete-activity/{id}(id=${activity.id})}">Delete</a></td>
             </tr>
@@ -29,6 +39,7 @@
         </table>
     </div>
     <p><a href="/create-activity">Create activity</a></p>
+    <p><a href="/">Go to main page</a></p>
 </div>
 </body>
 </html>

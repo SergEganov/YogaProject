@@ -13,6 +13,9 @@ public class ActivityType {
     @Column(name = "activity_type_name")
     private String name;
 
+    @Column(name = "available")
+    private Boolean available;
+
     public ActivityType() {
     }
 
@@ -34,5 +37,13 @@ public class ActivityType {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(Boolean available) {
+        this.available = available;
     }
 }

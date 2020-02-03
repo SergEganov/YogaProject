@@ -1,7 +1,8 @@
 package com.example.YogaProject.domain;
 
 import javax.persistence.*;
-import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.Set;
 @Table(name = "lounges")
 public class Lounge {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "lounge_id")
     private Long id;
 
@@ -23,8 +24,11 @@ public class Lounge {
     @Column(name = "lounge_capacity")
     private int capacity;
 
-    @Column(name = "lounge_worktime")
-    private Duration workTime;
+    @Column(name = "lounge_work_start")
+    private LocalTime startTime;
+
+    @Column(name = "lounge_work_finish")
+    private LocalTime finishTime;
 
     @OneToMany(mappedBy = "lounge", cascade = CascadeType.ALL)
     private List<Activity> activities;
@@ -73,6 +77,22 @@ public class Lounge {
         this.capacity = capacity;
     }
 
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(LocalTime finishTime) {
+        this.finishTime = finishTime;
+    }
+
     public List<Activity> getActivities() {
         return activities;
     }
@@ -87,13 +107,5 @@ public class Lounge {
 
     public void setActivityTypes(Set<ActivityType> activityTypes) {
         this.activityTypes = activityTypes;
-    }
-
-    public Duration getWorkTime() {
-        return workTime;
-    }
-
-    public void setWorkTime(Duration workTime) {
-        this.workTime = workTime;
     }
 }

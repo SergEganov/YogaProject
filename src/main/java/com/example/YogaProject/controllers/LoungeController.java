@@ -1,6 +1,5 @@
 package com.example.YogaProject.controllers;
 
-import com.example.YogaProject.domain.ActivityType;
 import com.example.YogaProject.domain.Lounge;
 import com.example.YogaProject.service.ActivityTypeService;
 import com.example.YogaProject.service.LoungeService;
@@ -10,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -40,7 +41,10 @@ public class LoungeController {
     }
 
     @PostMapping("/create-lounge")
-    public String createLounge(Lounge lounge){
+    public String createLounge(Lounge lounge,
+                               @RequestParam String start,
+                               @RequestParam String finish){
+        LoungeController.parseTime(lounge,start, finish);
         loungeService.save(lounge);
         return "redirect:/lounges";
     }
@@ -54,13 +58,24 @@ public class LoungeController {
     @GetMapping("/update-lounge/{id}")
     public String updateLoungeForm(@PathVariable("id") Long id, Model model){
         Lounge lounge = loungeService.findById(id);
+        model.addAttribute("activityTypes", activityTypeService.findAll());
         model.addAttribute("lounge", lounge);
         return "update-lounge";
     }
 
     @PostMapping("/update-lounge")
-    public String updateLounge(Lounge lounge){
+    public String updateLounge(Lounge lounge,
+                               @RequestParam String start,
+                               @RequestParam String finish){
+        LoungeController.parseTime(lounge,start, finish);
         loungeService.save(lounge);
         return "redirect:/lounges";
+    }
+
+    private static void parseTime(Lounge lounge, String start, String finish) {
+        LocalTime startTime = LocalTime.parse(start);
+        LocalTime finishTime = LocalTime.parse(finish);
+        lounge.setStartTime(startTime);
+        lounge.setFinishTime(finishTime);
     }
 }

@@ -37,6 +37,7 @@ public class ActivityTypeController {
 
     @PostMapping("/create-activityType")
     public String createActivityType(ActivityType activityType){
+        activityType.setAvailable(true);
         activityTypeService.saveActivityType(activityType);
         return "redirect:/activityTypes";
     }

@@ -33,7 +33,4 @@ public class ActivityService {
         activityRepo.deleteById(id);
     }
 
-    public List<Activity> findByTag(String tag) {
-        return activityRepo.findByTag(tag);
-    }
 }

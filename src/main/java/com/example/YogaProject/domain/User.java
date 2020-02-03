@@ -1,12 +1,15 @@
 package com.example.YogaProject.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "users_entities")
-public class UserEntity {
+@Table(name = "usrs")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,12 +17,13 @@ public class UserEntity {
     private Long id;
 
     @Column(name = "first_name")
-    /*@NotBlank
-    TODO Добавить аннотации @Valid в пост методы, разобраться как валидить int, data и тд
-    */
+    /*@NotBlank(message = "Please enter the name")
+    @Size(min=2, max=25, message = "Size of name: 2 from 25 symbols")*/
     private String firstName;
 
     @Column(name = "last_name")
+    /*@NotBlank(message = "Please enter the last name")
+    @Size(min=2, max=25, message = "Size of lastname: 2 from 25 symbols")*/
     private String lastName;
 
     private String email;
@@ -35,10 +39,10 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    public UserEntity() {
+    public User() {
     }
 
-    public UserEntity(String firstName, String lastName, String email, String phoneNumber, LocalDate birth) {
+    public User(String firstName, String lastName, String email, String phoneNumber, LocalDate birth) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

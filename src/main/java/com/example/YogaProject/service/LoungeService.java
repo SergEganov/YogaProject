@@ -17,11 +17,11 @@ public class LoungeService {
         this.loungeRepo = loungeRepo;
     }
 
-    public List<Lounge> findAll(){
+    public List<Lounge> findAll() {
         return loungeRepo.findAll();
     }
 
-    public void save(Lounge lounge){
+    public void save(Lounge lounge) {
         loungeRepo.save(lounge);
     }
 
@@ -29,7 +29,7 @@ public class LoungeService {
         loungeRepo.deleteById(id);
     }
 
-    public Lounge findById(Long id){
+    public Lounge findById(Long id) {
         return loungeRepo.getOne(id);
     }
 }

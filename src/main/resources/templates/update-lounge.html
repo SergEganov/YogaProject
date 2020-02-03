@@ -17,6 +17,18 @@
     <label for="capacity">Capacity</label>
     <input type="text" th:field="*{capacity}" id="capacity" placeholder="Capacity">
     <br/>
+    <label for="start">Start </label>
+    <input type="time" name="start" id="start" placeholder="Work hours:start">
+    <br/>
+    <label for="finish">Finish </label>
+    <input type="time" name="finish" id="finish" placeholder="Work hours:finish">
+    <br/>
+    <select th:field="*{activityTypes}" th:multiple="activityTypes">
+        <option th:each="activityType : ${activityTypes}"
+                th:value="${activityType.id}"
+                th:text="${activityType.name}">
+        </option>
+    </select>
     <input type="submit" value="Update lounge">
 </form>
 </body>

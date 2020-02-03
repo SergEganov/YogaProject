@@ -12,7 +12,10 @@
         <th>Id</th>
         <th>Name</th>
         <th>Address</th>
+        <th>Start work</th>
+        <th>Finish work</th>
         <th>Capacity</th>
+        <th>Activity Types</th>
     </tr>
     </thead>
     <tbody>
@@ -20,7 +23,14 @@
         <td th:text="${lounge.id}"></td>
         <td th:text="${lounge.name}"></td>
         <td th:text="${lounge.address}"></td>
+        <td th:text="${lounge.startTime.toString()}"></td>
+        <td th:text="${lounge.finishTime.toString()}"></td>
         <td th:text="${lounge.capacity}"></td>
+        <td>
+            <ul>
+                <li th:each="u : ${lounge.activityTypes}" th:text="${u.name}"></li>
+            </ul>
+        </td>
         <td><a th:href="@{/update-lounge/{id}(id=${lounge.id})}">Edit</a></td>
         <td><a th:href="@{/delete-lounge/{id}(id=${lounge.id})}">Delete</a></td>
     </tr>
@@ -28,6 +38,7 @@
 </table>
 </div>
 <p><a href="/create-lounge">Create lounge</a></p>
+<p><a href="/">Go to main page</a></p>
 </div>
 </body>
 </html>

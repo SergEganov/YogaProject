@@ -1,6 +1,6 @@
 package com.example.YogaProject.controllers;
 
-import com.example.YogaProject.domain.UserEntity;
+import com.example.YogaProject.domain.User;
 import com.example.YogaProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
@@ -28,33 +26,29 @@ public class UserController {
 
     @GetMapping("/users")
     public String getUsers(Model model){
-        List<UserEntity> users = userService.findAll();
+        List<User> users = userService.findAll();
         model.addAttribute("users", users);
         return "users-list";
     }
 
     @GetMapping("/create-user")
-    public String createUserForm(){
+    public String createUserForm(Model model){
+        model.addAttribute("user", new User());
         return "create-user";
     }
 
     @PostMapping("/create-user")
-    public String createUser(
-            @RequestParam String firstName,
-            @RequestParam String lastName,
-            @RequestParam String email,
-            @RequestParam String phoneNumber,
-            @RequestParam("birth") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate birth
+    public String createUser(User user,
+                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
-
-        UserEntity user = new UserEntity(firstName,lastName,email,phoneNumber,birth);
+        user.setBirth(date);
         /*LocalDate date;
         if (!birth.isEmpty() && birth.matches("^\\d+-\\d+-\\d+")){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             date= LocalDate.parse(birth, formatter);
-            user = new UserEntity(firstName,lastName,email,phoneNumber,date);
+            user = new User(firstName,lastName,email,phoneNumber,date);
         } else {
-            user = new UserEntity(firstName, lastName, email, phoneNumber, null);
+            user = new User(firstName, lastName, email, phoneNumber, null);
         }*/
         userService.saveUser(user);
         return "redirect:/users";
@@ -68,13 +62,16 @@ public class UserController {
 
     @GetMapping("/update-user/{id}")
     public String updateUserForm(@PathVariable("id") Long id, Model model){
-        UserEntity user = userService.findById(id);
+        User user = userService.findById(id);
         model.addAttribute("user", user);
         return "update-user";
     }
 
     @PostMapping("/update-user")
-    public String updateUser(UserEntity user){
+    public String updateUser(User user,
+                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+    ) {
+        user.setBirth(date);
         userService.saveUser(user);
         return "redirect:/users";
     }

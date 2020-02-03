@@ -2,8 +2,9 @@ package com.example.YogaProject.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 
 @Entity
@@ -18,17 +19,14 @@ public class Activity {
     @Column(name = "activity_name")
     private String name;
 
-    @Column(name = "activity_tag")
-    private String tag;
-
     @Column(name = "activity_capacity")
     private Integer capacity;
 
-    @Column(name = "activity_time")
-    private LocalDateTime time;
+    @Column(name = "activity_start")
+    private LocalDateTime startDateTime;
 
-    @Column(name = "activity_date")
-    private LocalDate date;
+    @Column(name = "activity_finish")
+    private LocalDateTime finishDateTime;
 
     @Column(name = "activity_price")
     private BigDecimal price;
@@ -38,7 +36,7 @@ public class Activity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
-    private UserEntity mentor;
+    private User mentor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "activity_type_id")
@@ -54,14 +52,13 @@ public class Activity {
             joinColumns = {@JoinColumn(name = "activity_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
-    private Set<UserEntity> users = new HashSet<>();
+    private Set<User> users = new HashSet<>();
 
     public Activity() {
     }
 
-    public Activity(String name, String tag) {
-        this.name = name;
-        this.tag = tag;
+    public String formattedData(LocalDateTime localDateTime){
+        return localDateTime.format(DateTimeFormatter.ofPattern("HH:mm, EEEE, dd.MM.yyyy"));
     }
 
     public Long getId() {
@@ -80,14 +77,6 @@ public class Activity {
         this.name = name;
     }
 
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
     public Integer getCapacity() {
         return capacity;
     }
@@ -96,20 +85,20 @@ public class Activity {
         this.capacity = capacity;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDateTime getFinishDateTime() {
+        return finishDateTime;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setFinishDateTime(LocalDateTime finishDateTime) {
+        this.finishDateTime = finishDateTime;
     }
 
     public BigDecimal getPrice() {
@@ -128,11 +117,11 @@ public class Activity {
         isAvailable = available;
     }
 
-    public UserEntity getMentor() {
+    public User getMentor() {
         return mentor;
     }
 
-    public void setMentor(UserEntity mentor) {
+    public void setMentor(User mentor) {
         this.mentor = mentor;
     }
 
@@ -152,11 +141,11 @@ public class Activity {
         this.lounge = lounge;
     }
 
-    public Set<UserEntity> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<UserEntity> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 }

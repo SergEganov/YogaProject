@@ -7,10 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -41,21 +39,23 @@ public class UserController {
 
     @PostMapping("/create-user")
     public String createUser(@Valid User user,
-                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-                             BindingResult bindingResult
+                             BindingResult bindingResult,
+                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
-        if (bindingResult.hasErrors()) {
+       if (userService.successfulValidation(user, bindingResult)) {
+           return "create-user";
+       } 
+       /* if (userService.checkUserExist(user)){
+            bindingResult.addError(new FieldError(
+                    "user",
+                    "email",
+                    "User with this email: " + user.getEmail()+ " is exist!"));
             return "create-user";
         }
-        user.setBirth(date);
-        /*LocalDate date;
-        if (!birth.isEmpty() && birth.matches("^\\d+-\\d+-\\d+")){
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            date= LocalDate.parse(birth, formatter);
-            user = new User(firstName,lastName,email,phoneNumber,date);
-        } else {
-            user = new User(firstName, lastName, email, phoneNumber, null);
+        if (bindingResult.hasErrors()) {
+            return "create-user";
         }*/
+        user.setBirth(date);
         userService.saveUser(user);
         return "redirect:/users";
     }
@@ -74,9 +74,23 @@ public class UserController {
     }
 
     @PostMapping("/update-user")
-    public String updateUser(User user,
+    public String updateUser(@Valid User user,
+                             BindingResult bindingResult,
                              @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
     ) {
+        if (userService.successfulValidation(user, bindingResult)) {
+            return "update-user";
+        } 
+        /*if (userService.checkUserExist(user)){
+            bindingResult.addError(new FieldError(
+                    "user",
+                    "email",
+                    "User with this email: " + user.getEmail()+ " is exist!"));
+            return "update-user";
+        }
+        if (bindingResult.hasErrors()) {
+            return "update-user";
+        }*/
         user.setBirth(date);
         userService.saveUser(user);
         return "redirect:/users";

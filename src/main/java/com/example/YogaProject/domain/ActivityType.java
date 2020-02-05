@@ -1,6 +1,10 @@
 package com.example.YogaProject.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "activity_types")
@@ -10,6 +14,10 @@ public class ActivityType {
     @Column(name = "activity_type_id")
     private Long id;
 
+    @Pattern(message = "Bad formed person first name",
+            regexp = "^[A-ZА-Я][a-zа-я]*")
+    @NotBlank
+    @Length(min = 2, max = 25)
     @Column(name = "activity_type_name")
     private String name;
 

@@ -1,5 +1,7 @@
 package com.example.YogaProject.domain;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -14,30 +16,31 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Pattern(message = "Bad formed person first name",
-            regexp = "^[A-Z][a-z]*(\\s(([a-z]{1,3})|(([a-z]+\\')?[A-Z][a-z]*)))*$")
-    @NotBlank
-    @Size(min=2, max=30)
-    @Column(name = "first_name")
+    @Pattern(message = "Enter your first name in format: Jack",
+            regexp = "^[A-ZА-Я][a-zа-я]*")
+    @NotBlank(message = "First name can't be empty!")
+    @Length(min = 2, max = 25, message = "First name length from 2 to 25 characters")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    /*@Pattern(message = "Bad formed person last name",
-            regexp = "^[A-Z][a-z]*(\\s(([a-z]{1,3})|(([a-z]+\\')?[A-Z][a-z]*)))*$")
-    @NotBlank
-    @Size(min=2, max=30)*/
-    @Column(name = "last_name")
+    @Pattern(message = "Enter your last name in format: Jackson",
+            regexp = "^[A-ZА-Я][a-zа-я]*")
+    @NotBlank(message = "Last name can't be empty!")
+    @Length(min = 2, max = 25, message = "Last name length from 2 to 25 characters")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    /*@Email*/
-    @Column(name = "email", unique = true)
+    @NotBlank(message = "Email can't be empty!")
+    @Email(message = "Check email form to: Test@test.com")
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-   /* @NotNull
-    @Digits(integer=11, fraction=0, message = "Введите номер без пробелов")*/
-    @Column(name = "phone_number")
+    @NotNull(message = "Phone number can't be empty!")
+    @Digits(integer=11, fraction=0, message = "Check that you entered the numbers")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    /*@Past*/
+    @Past(message = "Please enter correct birthday(date can't be later than today)")
     @Column(name = "birthday")
     private LocalDate birth;
 

@@ -5,25 +5,39 @@
 </head>
 <body>
 <form action="#" th:action="@{/update-user}" th:object="${user}" method="post">
-    <label for="id">ID</label>
-    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
-    <br/>
-    <label for="firstName">First name</label>
-    <input type="text" th:field="*{firstName}" id="firstName" placeholder="First name">
-    <br/>
-    <label for="lastName">Last name</label>
-    <input type="text" th:field="*{lastName}" id="lastName" placeholder="Last name">
-    <br/>
-    <label for="email">Email</label>
-    <input type="text" th:field="*{email}" id="email" placeholder="Email">
-    <br/>
-    <label for="phoneNumber">Phone number</label>
-    <input type="text" th:field="*{phoneNumber}" id="phoneNumber" placeholder="Phone number">
-    <br/>
-    <label for="date">Birthday</label>
-    <input type="date" name="date" id="date" placeholder="Birthday">
-    <br/>
-    <input type="submit" value="Update User">
+    <table>
+        <tr>
+            <td>ID</td>
+            <td><input readonly type="number" th:field="*{id}" placeholder="ID"></td>
+        </tr>
+        <tr>
+            <td>First name</td>
+            <td><input type="text" th:field="*{firstName}" placeholder="First name"></td>
+            <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" ></td>
+        </tr>
+        <tr>
+            <td>Last Name</td>
+            <td><input type="text" th:field="*{lastName}" placeholder="Last name"></td>
+            <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" ></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="text" th:field="*{email}" placeholder="Email"></td>
+            <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></td>
+        </tr>
+        <tr>
+            <td>Phone number</td>
+            <td><input type="text" th:field="*{phoneNumber}" placeholder="Phone number"></td>
+            <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></td>
+        </tr>
+        <tr>
+            <td>Birthday</td>
+            <td><input type="date" name="date" placeholder="Birthday"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Update User"></td>
+        </tr>
+    </table>
 </form>
 </body>
 </html>

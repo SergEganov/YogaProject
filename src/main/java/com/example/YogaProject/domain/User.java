@@ -1,9 +1,7 @@
 package com.example.YogaProject.domain;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -16,21 +14,30 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
+    @Pattern(message = "Bad formed person first name",
+            regexp = "^[A-Z][a-z]*(\\s(([a-z]{1,3})|(([a-z]+\\')?[A-Z][a-z]*)))*$")
+    @NotBlank
+    @Size(min=2, max=30)
     @Column(name = "first_name")
-    /*@NotBlank(message = "Please enter the name")
-    @Size(min=2, max=25, message = "Size of name: 2 from 25 symbols")*/
     private String firstName;
 
+    /*@Pattern(message = "Bad formed person last name",
+            regexp = "^[A-Z][a-z]*(\\s(([a-z]{1,3})|(([a-z]+\\')?[A-Z][a-z]*)))*$")
+    @NotBlank
+    @Size(min=2, max=30)*/
     @Column(name = "last_name")
-    /*@NotBlank(message = "Please enter the last name")
-    @Size(min=2, max=25, message = "Size of lastname: 2 from 25 symbols")*/
     private String lastName;
 
+    /*@Email*/
+    @Column(name = "email", unique = true)
     private String email;
 
+   /* @NotNull
+    @Digits(integer=11, fraction=0, message = "Введите номер без пробелов")*/
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    /*@Past*/
     @Column(name = "birthday")
     private LocalDate birth;
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<body>
+<div >
+    <h2 th:text="'Visitors of ' + ${activity.name}"> </h2>
+    <table>
+        <thead>
+        <tr>
+            <th>User ID</th>
+            <th>First Name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <th>Birthday</th>
+            <th>Phone number</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.getId()}"></td>
+            <td th:text="${user.getFirstName()}"></td>
+            <td th:text="${user.getLastName()}"></td>
+            <td th:text="${user.getEmail()}"></td>
+            <td th:text="${user.getBirth()}"></td>
+            <td th:text="${user.getPhoneNumber()}"></td>
+            <td><a th:href="@{/delete-user-from-activity/{activity_id}/{user_id}(activity_id=${activity.id}, user_id=${user.id})}">Delete visitor</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<p><a href="/activities">Go to main page</a></p>
+</div>
+</body>
+</html>

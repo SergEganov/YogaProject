@@ -1,9 +1,12 @@
 package com.example.YogaProject.controllers;
 
 import com.example.YogaProject.domain.Activity;
+import com.example.YogaProject.domain.User;
 import com.example.YogaProject.service.ActivityService;
 import com.example.YogaProject.service.ActivityTypeService;
 import com.example.YogaProject.service.LoungeService;
+import com.example.YogaProject.service.UserService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ActivityController {
@@ -22,12 +28,15 @@ public class ActivityController {
     private final ActivityService activityService;
     private final ActivityTypeService activityTypeService;
     private final LoungeService loungeService;
+    private final UserService userService;
 
     @Autowired
-    public ActivityController(ActivityService activityService, ActivityTypeService activityTypeService, LoungeService loungeService) {
+    public ActivityController(ActivityService activityService, ActivityTypeService activityTypeService, LoungeService loungeService,
+                              UserService userService) {
         this.activityService = activityService;
         this.activityTypeService = activityTypeService;
         this.loungeService = loungeService;
+        this.userService = userService;
     }
 
     @GetMapping("/activities")
@@ -76,6 +85,50 @@ public class ActivityController {
         ActivityController.parseTime(activity, start, finish);
         activityService.saveActivity(activity);
         return "redirect:/activities";
+    }
+
+    @GetMapping("/sign-up/{id}")
+    public String signUpForm(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes){
+        Activity activity = activityService.findById(id);
+        model.addAttribute("activity", activity);
+        if (!activityService.checkForSignUp(activity)) {
+            redirectAttributes.addFlashAttribute("message", "Запись окончена/нет мест");
+            return "redirect:/activities";
+        }
+        model.addAttribute("user", new User());
+        return "sign-up";
+    }
+
+    @PostMapping("/sign-up/{id}")
+    public String signUp(@PathVariable ("id") Long id, User user) {
+        Activity activity = activityService.findById(id);
+        User userFromDb =  userService.findByEmail(user.getEmail());
+        if(userFromDb == null) {
+            userService.saveUser(user);
+            activity.getUsers().add(userService.findByEmail(user.getEmail()));
+        } else {
+            activity.getUsers().add(userFromDb);
+        }
+        activityService.saveActivity(activity);
+        return "redirect:/activities";
+    }
+
+    @GetMapping("/registered-users/{id}")
+    public String checkRegisteredUsers(@PathVariable("id") Long id,
+                                       Model model){
+        Activity activity = activityService.findById(id);
+        model.addAttribute("users", activity.getUsers());
+        model.addAttribute("activity", activity);
+        return "users-on-activity";
+    }
+
+    @GetMapping("/delete-user-from-activity/{activity_id}/{user_id}")
+    public String deleteUserFromActivity(@PathVariable("activity_id") Long activity_id,
+                                         @PathVariable("user_id") Long user_id) {
+        Activity activity = activityService.findById(activity_id);
+        activity.getUsers().remove(userService.findById(user_id));
+        activityService.saveActivity(activity);
+        return "redirect:/registered-users/" + activity_id;
     }
 
     private static void parseTime(Activity activity, String start, String finish) {

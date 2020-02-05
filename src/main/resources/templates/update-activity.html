@@ -15,9 +15,9 @@
     <input type="number" th:field="*{capacity}" id="capacity" placeholder="Capacity">
     <br/>
     <label for="start">Start </label>
-    <input type="datetime-local" name="start" id="start" placeholder="Start of activity">
+    <input type="datetime-local"  name="start" id="start" placeholder="Start of activity" th:text="*{startDateTime}">
     <label for="finish">Finish </label>
-    <input type="datetime-local" name="finish" id="finish" placeholder="Finish of activity">
+    <input type="datetime-local" name="finish" id="finish" placeholder="Finish of activity" th:text="*{finishDateTime}">
     <br/>
     <label for="price">Price</label>
     <input type="number" th:field="*{price}" id="price" placeholder="Price">
@@ -41,9 +41,5 @@
     <br/>
     <input type="submit" value="Update Activity">
 </form>
-
-
-
-
 </body>
 </html>

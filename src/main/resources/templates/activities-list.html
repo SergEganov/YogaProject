@@ -5,7 +5,8 @@
     <title>Activities</title>
 </head>
 <body>
-<div >
+<span th:text="${message}"></span>
+<div>
         <h2>Activities</h2>
         <table>
             <thead>
@@ -32,6 +33,8 @@
                 <td th:text="${activity.price}"></td>
                 <td th:text="${activity.available}"></td>
                 <td th:text="${activity.lounge.name}"></td>
+                <td><a th:href="@{registered-users/{id}(id=${activity.id})}">Visitors</a></td>
+                <td><a th:href="@{sign-up/{id}(id=${activity.id})}">Sign up</a></td>
                 <td><a th:href="@{update-activity/{id}(id=${activity.id})}">Edit</a></td>
                 <td><a th:href="@{delete-activity/{id}(id=${activity.id})}">Delete</a></td>
             </tr>

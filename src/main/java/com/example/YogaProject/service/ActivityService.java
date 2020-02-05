@@ -5,6 +5,7 @@ import com.example.YogaProject.repos.ActivityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,6 +32,18 @@ public class ActivityService {
 
     public void deleteById(Long id) {
         activityRepo.deleteById(id);
+    }
+
+    public boolean checkForSignUp(Activity activity) {
+        LocalDateTime todayDateTime = LocalDateTime.now();
+        LocalDateTime activityDateTime = activity.getStartDateTime();
+        if (activityDateTime.minusHours(2).isBefore(todayDateTime)) {
+            return false;
+        }
+        if(activity.getUsers().size() >= activity.getCapacity()) {
+            return false;
+        }
+        return true;
     }
 
 }

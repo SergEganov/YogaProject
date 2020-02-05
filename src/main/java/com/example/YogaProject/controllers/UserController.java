@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -38,9 +40,13 @@ public class UserController {
     }
 
     @PostMapping("/create-user")
-    public String createUser(User user,
-                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+    public String createUser(@Valid User user,
+                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+                             BindingResult bindingResult
     ) {
+        if (bindingResult.hasErrors()) {
+            return "create-user";
+        }
         user.setBirth(date);
         /*LocalDate date;
         if (!birth.isEmpty() && birth.matches("^\\d+-\\d+-\\d+")){

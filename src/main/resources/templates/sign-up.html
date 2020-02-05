@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<meta charset="UTF-8">
+<title>Update activity</title>
+</head>
+<body>
+<form action="#" th:action="@{/sign-up/{id}(id=${activity.id})}" method="post">
+    <span th:text="${'Вы записываетесь на мероприятие ' + activity.name + ' которое пройдет ' + activity.startDateTime}"></span>
+    <br/>
+    <label for="name">First Name</label>
+    <input type="text" th:field="${user.firstName}" id="name" placeholder="First name">
+    <br/>
+
+    <label for="lastName">Last Name </label>
+    <input type="text" th:field="${user.lastName}" id="lastName" placeholder="Last name">
+    <br/>
+
+    <label for="email">Email</label>
+    <input type="email" th:field="${user.email}" id="email" placeholder="Email">
+    <br/>
+
+    <label for="phoneNumber">Phone number </label>
+    <input type="tel" name="finish" id="phoneNumber" placeholder="Phone number">
+    <br/>
+
+    <input type="submit" value="Sign up to activity">
+</form>
+</body>
+</html>

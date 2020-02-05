@@ -33,6 +33,14 @@ public class UserService {
         userRepo.deleteById(id);
     }
 
+    public User findByFirstNameAndLastName(String firstName, String lastName) {
+        return userRepo.findByFirstNameAndLastName(firstName,lastName);
+    }
+
+    public User findByEmail(String email){
+        return userRepo.findByEmail(email);
+    }
+
     public List<User> findByLastName(String lastName) {
         return userRepo.findByLastName(lastName);
     }

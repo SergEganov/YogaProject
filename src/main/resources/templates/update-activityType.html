@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
-<meta charset="UTF-8">
-<title>Create user</title>
+    <meta charset="UTF-8">
+    <title>Create user</title>
 </head>
-<body>
-<form action="#" th:action="@{/update-activityType}" th:object="${activityType}" method="post">
-    <label for="id">ID</label>
-    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
-    <br/>
-    <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="Name">
-    <br/>
-    <label for="available">Available</label>
-    <input type="checkbox" th:field="*{available}" id="available" placeholder="Is available">
-    <br/>
-    <input type="submit" value="Update event type">
-</form>
-</body>
+    <body>
+        <form action="#" th:action="@{/update-activityType}" th:object="${activityType}" method="post">
+            <table>
+                <tr>
+                    <td>ID</td>
+                    <td><input readonly type="number" th:field="*{id}" placeholder="ID"></td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td><input type="text" th:field="*{name}" placeholder="Name"></td>
+                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Available</td>
+                    <td><input type="checkbox" th:field="*{available}" placeholder="Is available"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Update activityType"></td>
+                </tr>
+                <tr>
+                    <td><a href="/activityTypes">Go to activity types list</a></td>
+                </tr>
+            </table>
+        </form>
+    </body>
 </html>

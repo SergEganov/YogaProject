@@ -1,35 +1,57 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
-<meta charset="UTF-8">
-<title>Create user</title>
-</head>
-<body>
-<form action="#" th:action="@{/update-lounge}" th:object="${lounge}" method="post">
-    <label for="id">ID</label>
-    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
-    <br/>
-    <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="Name">
-    <br/>
-    <label for="address">Address</label>
-    <input type="text" th:field="*{address}" id="address" placeholder="Address">
-    <br/>
-    <label for="capacity">Capacity</label>
-    <input type="text" th:field="*{capacity}" id="capacity" placeholder="Capacity">
-    <br/>
-    <label for="start">Start </label>
-    <input type="time" name="start" id="start" placeholder="Work hours:start">
-    <br/>
-    <label for="finish">Finish </label>
-    <input type="time" name="finish" id="finish" placeholder="Work hours:finish">
-    <br/>
-    <select th:field="*{activityTypes}" th:multiple="activityTypes">
-        <option th:each="activityType : ${activityTypes}"
-                th:value="${activityType.id}"
-                th:text="${activityType.name}">
-        </option>
-    </select>
-    <input type="submit" value="Update lounge">
-</form>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Create user</title>
+    </head>
+    <body>
+        <form action="#" th:action="@{/update-lounge}" th:object="${lounge}" method="post">
+            <table>
+                <tr>
+                    <td>ID</td>
+                    <td> <input readonly type="number" th:field="*{id}" placeholder="ID"></td>
+                </tr>
+                <tr>
+                    <td>Lounge name</td>
+                    <td><input type="text" th:field="*{name}" placeholder="Lounge name"></td>
+                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td><input type="text" th:field="*{address}"  placeholder="Address"></td>
+                    <td th:if="${#fields.hasErrors('address')}" th:errors="*{address}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Capacity</td>
+                    <td><input type="text" th:field="*{capacity}" placeholder="Capacity"></td>
+                    <td th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Activity type</td>
+                    <td>
+                        <select th:field="*{activityTypes}" th:multiple="activityTypes">
+                            <option th:each="activityType : ${activityTypes}"
+                                    th:value="${activityType.id}"
+                                    th:text="${activityType.name}">
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Start</td>
+                    <td><input type="time" name="start" placeholder="Start work"></td>
+                </tr>
+                <tr>
+                    <td>Finish</td>
+                    <td><input type="time" name="finish" placeholder="Finish work"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Update Lounge"></td>
+                </tr>
+                <tr>
+                    <td><a href="/lounges">Go to lounges list</a></td>
+                </tr>
+            </table>
+        </form>
+    </body>
 </html>

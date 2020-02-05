@@ -4,7 +4,10 @@ import com.example.YogaProject.domain.Lounge;
 import com.example.YogaProject.repos.LoungeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -31,5 +34,41 @@ public class LoungeService {
 
     public Lounge findById(Long id) {
         return loungeRepo.getOne(id);
+    }
+
+    /*public void parseTime(Lounge lounge, String start, String finish) {
+        LocalTime startTime = LocalTime.parse(start);
+        LocalTime finishTime = LocalTime.parse(finish);
+        lounge.setStartTime(startTime);
+        lounge.setFinishTime(finishTime);
+    }*/
+
+
+    private Boolean checkLoungeExist(Lounge lounge) {
+        Lounge loungeFromDb = loungeRepo.findByName(lounge.getName());
+        return loungeFromDb != null;
+    }
+
+    public Boolean createValidation(Lounge lounge, BindingResult bindingResult){
+        if (checkLoungeExist(lounge)) {
+            bindingResult.addError(new FieldError(
+                    "lounge",
+                    "name",
+                    "Lounge with name: " + lounge.getName() + " is exist!"));
+        }
+        return bindingResult.hasErrors();
+    }
+
+    public Boolean updateValidation(Lounge lounge, BindingResult bindingResult) {
+        if(checkLoungeExist(lounge)){
+            Lounge loungeFromDb = loungeRepo.findByName(lounge.getName());
+            if (!loungeFromDb.getId().equals(lounge.getId())) {
+                bindingResult.addError(new FieldError(
+                        "lounge",
+                        "name",
+                        "Lounge with name: " + lounge.getName() + " is exist!"));
+            }
+        }
+        return bindingResult.hasErrors();
     }
 }

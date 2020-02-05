@@ -35,7 +35,7 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @NotNull(message = "Phone number can't be empty!")
+    @NotBlank(message = "Phone number can't be empty!")
     @Digits(integer=11, fraction=0, message = "Check that you entered the numbers")
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;

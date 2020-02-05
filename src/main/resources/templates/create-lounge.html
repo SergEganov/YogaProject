@@ -6,24 +6,48 @@
 </head>
 <body>
 <form action="#" th:action="@{/create-lounge}" th:object="${lounge}" method="post">
-    <label for="name">Name </label>
-    <input type="text" th:field="*{name}" id="name" placeholder="Name">
-    <label for="address">Address </label>
-    <input type="text" th:field="*{address}" id="address" placeholder="Address">
-    <label for="capacity">Capacity </label>
-    <input type="text" th:field="*{capacity}" id="capacity" placeholder="Capacity">
-
-    <select th:field="*{activityTypes}" th:multiple="activityTypes">
-        <option th:each="activityType : ${activityTypes}"
-                th:value="${activityType.id}"
-                th:text="${activityType.name}">
-        </option>
-    </select>
-    <label for="start">Start </label>
-    <input type="time" name="start" id="start" placeholder="Work hours:start">
-    <label for="finish">Finish </label>
-    <input type="time" name="finish" id="finish" placeholder="Work hours:finish">
-    <input type="submit" value="Create lounge">
+    <table>
+        <tr>
+            <td>Lounge name</td>
+            <td><input type="text" th:field="*{name}" placeholder="Lounge name"></td>
+            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td><input type="text" th:field="*{address}"  placeholder="Address"></td>
+            <td th:if="${#fields.hasErrors('address')}" th:errors="*{address}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Capacity</td>
+            <td><input type="text" th:field="*{capacity}" placeholder="Capacity"></td>
+            <td th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Activity type</td>
+            <td>
+                <select th:field="*{activityTypes}" th:multiple="activityTypes">
+                    <option th:each="activityType : ${activityTypes}"
+                        th:value="${activityType.id}"
+                        th:text="${activityType.name}">
+                    </option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Start</td>
+            <td><input type="time" name="start" placeholder="Start work"></td>
+        </tr>
+        <tr>
+            <td>Finish</td>
+            <td><input type="time" name="finish" placeholder="Finish work"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Create Lounge"></td>
+        </tr>
+        <tr>
+            <td><a href="/lounges">Go to lounges list</a></td>
+        </tr>
+    </table>
 </form>
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.example.YogaProject.domain;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.validation.constraints.*;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
@@ -15,19 +15,24 @@ public class Lounge {
     @Column(name = "lounge_id")
     private Long id;
 
-    @Column(name = "lounge_name")
+    @NotBlank(message = "First name can't be empty!")
+    @Column(name = "lounge_name", unique = true, nullable = false)
     private String name;
 
-    @Column(name = "lounge_address")
+    @NotBlank(message = "First name can't be empty!")
+    @Column(name = "lounge_address", nullable = false)
     private String address;
 
-    @Column(name = "lounge_capacity")
+    @Min(value = 1, message = "Capacity must be > 0")
+    @NotNull(message = "Lounge capacity can't be empty!")
+    @Digits(integer=3, fraction=0, message = "Check that you entered the numbers")
+    @Column(name = "lounge_capacity", nullable = false)
     private int capacity;
 
-    @Column(name = "lounge_work_start")
+    @Column(name = "lounge_work_start", nullable = false)
     private LocalTime startTime;
 
-    @Column(name = "lounge_work_finish")
+    @Column(name = "lounge_work_finish", nullable = false)
     private LocalTime finishTime;
 
     @OneToMany(mappedBy = "lounge", cascade = CascadeType.ALL)
@@ -43,6 +48,16 @@ public class Lounge {
 
 
     public Lounge() {
+    }
+
+    public Lounge(String name, String address, int capacity, LocalTime startTime, LocalTime finishTime, List<Activity> activities, Set<ActivityType> activityTypes) {
+        this.name = name;
+        this.address = address;
+        this.capacity = capacity;
+        this.startTime = startTime;
+        this.finishTime = finishTime;
+        this.activities = activities;
+        this.activityTypes = activityTypes;
     }
 
     public Long getId() {

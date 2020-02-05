@@ -27,37 +27,41 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public User saveUser(User user) {
-        return userRepo.save(user);
+    public void saveUser(User user) {
+        userRepo.save(user);
     }
 
     public void deleteById(Long id) {
         userRepo.deleteById(id);
     }
 
-    public User findByFirstNameAndLastName(String firstName, String lastName) {
-        return userRepo.findByFirstNameAndLastName(firstName, lastName);
-    }
-
     public User findByEmail(String email) {
         return userRepo.findByEmail(email);
     }
 
-    public List<User> findByLastName(String lastName) {
-        return userRepo.findByLastName(lastName);
-    }
-
-    public Boolean checkUserExist(User user) {
+    private Boolean checkUserExist(User user) {
         User userFromDb = userRepo.findByEmail(user.getEmail());
         return userFromDb != null;
     }
 
-    public Boolean successfulValidation(User user, BindingResult bindingResult) {
+    public Boolean createValidation(User user, BindingResult bindingResult) {
         if (checkUserExist(user)) {
             bindingResult.addError(new FieldError(
                     "user",
                     "email",
                     "User with this email: " + user.getEmail() + " is exist!"));
+        }
+        return bindingResult.hasErrors();
+    }
+    public Boolean updateValidation(User user, BindingResult bindingResult) {
+        if(checkUserExist(user)){
+            User userFromDb = userRepo.findByEmail(user.getEmail());
+            if (!userFromDb.getId().equals(user.getId())) {
+                bindingResult.addError(new FieldError(
+                        "user",
+                        "email",
+                        "User with this email: " + user.getEmail() + " is exist!"));
+            }
         }
         return bindingResult.hasErrors();
     }

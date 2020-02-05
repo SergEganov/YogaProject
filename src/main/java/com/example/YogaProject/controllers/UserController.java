@@ -7,7 +7,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,21 +39,10 @@ public class UserController {
     @PostMapping("/create-user")
     public String createUser(@Valid User user,
                              BindingResult bindingResult,
-                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
-    ) {
-       if (userService.successfulValidation(user, bindingResult)) {
+                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+       if (userService.createValidation(user, bindingResult)) {
            return "create-user";
-       } 
-       /* if (userService.checkUserExist(user)){
-            bindingResult.addError(new FieldError(
-                    "user",
-                    "email",
-                    "User with this email: " + user.getEmail()+ " is exist!"));
-            return "create-user";
-        }
-        if (bindingResult.hasErrors()) {
-            return "create-user";
-        }*/
+       }
         user.setBirth(date);
         userService.saveUser(user);
         return "redirect:/users";
@@ -76,22 +64,11 @@ public class UserController {
     @PostMapping("/update-user")
     public String updateUser(@Valid User user,
                              BindingResult bindingResult,
-                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
-    ) {
-        if (userService.successfulValidation(user, bindingResult)) {
-            return "update-user";
-        } 
-        /*if (userService.checkUserExist(user)){
-            bindingResult.addError(new FieldError(
-                    "user",
-                    "email",
-                    "User with this email: " + user.getEmail()+ " is exist!"));
+                             @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        user.setBirth(date);
+        if (userService.updateValidation(user, bindingResult)) {
             return "update-user";
         }
-        if (bindingResult.hasErrors()) {
-            return "update-user";
-        }*/
-        user.setBirth(date);
         userService.saveUser(user);
         return "redirect:/users";
     }

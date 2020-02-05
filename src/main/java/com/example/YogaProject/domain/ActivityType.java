@@ -14,11 +14,10 @@ public class ActivityType {
     @Column(name = "activity_type_id")
     private Long id;
 
-    @Pattern(message = "Bad formed person first name",
-            regexp = "^[A-ZА-Я][a-zа-я]*")
-    @NotBlank
-    @Length(min = 2, max = 25)
-    @Column(name = "activity_type_name")
+    @Pattern(message = "Enter activity name in format: Yoga", regexp = "^[A-ZА-Я][a-zа-я]*")
+    @NotBlank(message = "Name cant be empty!")
+    @Length(min = 2, max = 30, message = "Activity name length from 2 to 30 characters")
+    @Column(name = "activity_type_name", unique = true, nullable = false)
     private String name;
 
     @Column(name = "available")

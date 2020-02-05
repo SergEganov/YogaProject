@@ -11,22 +11,22 @@
         <tr>
             <td>First Name</td>
             <td><input type="text" th:field="*{firstName}" placeholder="First name"></td>
-            <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" ></td>
+            <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color: crimson"></td>
         </tr>
         <tr>
             <td>Last Name</td>
             <td><input type="text" th:field="*{lastName}" placeholder="Last name"></td>
-            <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" ></td>
+            <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: crimson"></td>
         </tr>
         <tr>
             <td>Email</td>
             <td><input type="text" th:field="*{email}" placeholder="Email"></td>
-            <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}" ></td>
+            <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: crimson"></td>
         </tr>
         <tr>
             <td>Phone number</td>
             <td><input type="text" th:field="*{phoneNumber}" placeholder="Phone number"></td>
-            <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></td>
+            <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" style="color: crimson"></td>
         </tr>
         <tr>
             <td>Birthday</td>
@@ -34,6 +34,9 @@
         </tr>
         <tr>
             <td><input type="submit" value="Create User"></td>
+        </tr>
+        <tr>
+            <td><a href="/users">Go to users list</a></td>
         </tr>
     </table>
 </form>

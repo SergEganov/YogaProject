@@ -1,6 +1,5 @@
 package com.example.YogaProject.controllers;
 
-import com.example.YogaProject.domain.Activity;
 import com.example.YogaProject.domain.ActivityType;
 import com.example.YogaProject.service.ActivityTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +38,7 @@ public class ActivityTypeController {
 
     @PostMapping("/create-activityType")
     public String createActivityType(@Valid ActivityType activityType, BindingResult bindingResult){
-        if(bindingResult.hasErrors()) {
+        if(activityTypeService.activityTypeValidation(activityType,bindingResult)) {
             return "create-activityType";
         }
         activityType.setAvailable(true);
@@ -61,7 +60,11 @@ public class ActivityTypeController {
     }
 
     @PostMapping("/update-activityType")
-    public String updateActivityType(ActivityType activityType){
+    public String updateActivityType(@Valid ActivityType activityType,
+                                     BindingResult bindingResult){
+        if(activityTypeService.activityTypeValidation(activityType,bindingResult)) {
+            return "update-activityType";
+        }
         activityTypeService.saveActivityType(activityType);
         return "redirect:/activityTypes";
     }

@@ -30,7 +30,18 @@
         </tr>
         <tr>
             <td>Birthday</td>
-            <td><input type="date" name="date" placeholder="Birthday"></td>
+            <td><input type="date" th:field="*{birth}" placeholder="Birthday"></td>
+            <td th:if="${#fields.hasErrors('birth')}" th:errors="*{birth}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>
+            <select th:field="*{roles}" multiple>
+                <option th:each="role : ${roles}"
+                        th:value="${role}"
+                        th:text="${role}">
+                </option>
+            </select>
+            </td>
         </tr>
         <tr>
             <td><input type="submit" value="Create User"></td>

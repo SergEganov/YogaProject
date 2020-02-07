@@ -1,5 +1,7 @@
 package com.example.YogaProject.domain;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalTime;
@@ -25,13 +27,17 @@ public class Lounge {
 
     @Min(value = 1, message = "Capacity must be > 0")
     @NotNull(message = "Lounge capacity can't be empty!")
-    @Digits(integer=3, fraction=0, message = "Check that you entered the numbers")
+    @Digits(integer=3, fraction=0, message = "Max capacity is 999")
     @Column(name = "lounge_capacity", nullable = false)
     private int capacity;
 
+    @NotNull(message = "Not empty")
+    @DateTimeFormat(pattern = "HH:mm")
     @Column(name = "lounge_work_start", nullable = false)
     private LocalTime startTime;
 
+    @NotNull(message = "Not empty")
+    @DateTimeFormat(pattern = "HH:mm")
     @Column(name = "lounge_work_finish", nullable = false)
     private LocalTime finishTime;
 

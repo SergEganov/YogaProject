@@ -15,11 +15,12 @@
                 <th>Name</th>
                 <th>ActivityType</th>
                 <th>Capacity</th>
+                <th>Date</th>
                 <th>Start</th>
                 <th>Finish</th>
                 <th>Price</th>
-                <th>Available</th>
                 <th>Lounge</th>
+                <th>Available</th>
             </tr>
             </thead>
             <tbody>
@@ -28,11 +29,12 @@
                 <td th:text="${activity.name}"></td>
                 <td th:text="${activity.activityType.name}"></td>
                 <td th:text="${activity.capacity}"></td>
-                <td th:text="${activity.formattedData(activity.startDateTime)}"></td>
-                <td th:text="${activity.formattedData(activity.finishDateTime)}"></td>
+                <td th:text="${#temporals.format(activity.dateOfActivity, 'yyyy-MM-dd')}"></td>
+                <td th:text="${#temporals.format(activity.startTime, 'HH:mm')}"></td>
+                <td th:text="${#temporals.format(activity.finishTime, 'HH:mm')}"></td>
                 <td th:text="${activity.price}"></td>
-                <td th:text="${activity.available}"></td>
                 <td th:text="${activity.lounge.name}"></td>
+                <td th:text="${activity.available}"></td>
                 <td><a th:href="@{registered-users/{id}(id=${activity.id})}">Visitors</a></td>
                 <td><a th:href="@{sign-up/{id}(id=${activity.id})}">Sign up</a></td>
                 <td><a th:href="@{update-activity/{id}(id=${activity.id})}">Edit</a></td>

@@ -2,44 +2,79 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <meta charset="UTF-8">
 <title>Update activity</title>
-</head>
-<body>
-<form action="#" th:action="@{/update-activity}" th:object="${activity}" method="post">
-    <label for="id">ID</label>
-    <input readonly type="number" th:field="*{id}" id="id" placeholder="ID">
-    <br/>
-    <label for="name">Name</label>
-    <input type="text" th:field="*{name}" id="name" placeholder="Name">
-    <br/>
-    <label for="capacity">Capacity </label>
-    <input type="number" th:field="*{capacity}" id="capacity" placeholder="Capacity">
-    <br/>
-    <label for="start">Start </label>
-    <input type="datetime-local"  name="start" id="start" placeholder="Start of activity" th:text="*{startDateTime}">
-    <label for="finish">Finish </label>
-    <input type="datetime-local" name="finish" id="finish" placeholder="Finish of activity" th:text="*{finishDateTime}">
-    <br/>
-    <label for="price">Price</label>
-    <input type="number" th:field="*{price}" id="price" placeholder="Price">
-    <br/>
-    <label for="available">Available</label>
-    <input type="checkbox" th:field="*{available}" id="available" placeholder="Is available">
-    <br/>
-    <select th:field="*{activityType}">
-        <option th:each="activityType : ${activityTypes}"
-                th:value="${activityType.id}"
-                th:text="${activityType.name}">
-        </option>
-    </select>
-    <br/>
-    <select th:field="${activity.lounge}" >
-        <option th:each="lounge : ${lounges}"
-                th:value="${lounge.id}"
-                th:text="${lounge.name}">
-        </option>
-    </select>
-    <br/>
-    <input type="submit" value="Update Activity">
-</form>
-</body>
+    <body>
+        <form action="#" th:action="@{/update-activity}" th:object="${activity}" method="post">
+            <table>
+                <tr>
+                    <td>Id</td>
+                    <td><input readonly type="number" th:field="*{id}" placeholder="ID">
+                </tr>
+                <tr>
+                    <td>Activity name</td>
+                    <td><input type="text" th:field="*{name}" placeholder="Activity name"></td>
+                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Capacity</td>
+                    <td><input type="number" th:field="*{capacity}"  placeholder="Capacity"></td>
+                    <td th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Activity type</td>
+                    <td>
+                        <select th:field="*{activityType}" th:multiple="activityTypes">
+                            <option th:each="activityType : ${activityTypes}"
+                                    th:value="${activityType.id}"
+                                    th:text="${activityType.name}">
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('activityType')}" th:errors="*{activityType}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                <tr>
+                    <td>Lounge</td>
+                    <td>
+                        <select th:field="*{lounge}" >
+                            <option th:each="lounge : ${lounges}"
+                                    th:value="${lounge.id}"
+                                    th:text="${lounge.name}">
+                            </option>
+                        </select>
+                    </td>
+                    <td th:if="${#fields.hasErrors('lounge')}" th:errors="*{lounge}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Date of activity</td>
+                    <td><input type="date" th:field="*{dateOfActivity}" placeholder="Date of activity"></td>
+                    <td th:if="${#fields.hasErrors('dateOfActivity')}" th:errors="*{dateOfActivity}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Start</td>
+                    <td><input type="time" th:field="*{startTime}" placeholder="Start"></td>
+                    <td th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Finish</td>
+                    <td><input type="time" th:field="*{finishTime}" placeholder="Finish"></td>
+                    <td th:if="${#fields.hasErrors('finishTime')}" th:errors="*{finishTime}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td><input type="number" th:field="*{price}" placeholder="Price"></td>
+                    <td th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td>Available</td>
+                    <td><input type="checkbox" th:field="*{available}" placeholder="Is available"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Update activity"></td>
+                </tr>
+                <tr>
+                    <td><a href="/activities">Go to activities list</a></td>
+                </tr>
+            </table>
+        </form>
+    </body>
 </html>

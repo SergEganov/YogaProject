@@ -1,6 +1,7 @@
 package com.example.YogaProject.domain;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -40,10 +41,12 @@ public class User {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "Please enter correct birthday(date can't be later than today)")
     @Column(name = "birthday")
     private LocalDate birth;
 
+    @NotNull
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)

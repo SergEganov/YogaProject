@@ -44,16 +44,16 @@ public class UserService {
         return userFromDb != null;
     }
 
-    public Boolean createValidation(User user, BindingResult bindingResult) {
+    public Boolean createUserValidation(User user, BindingResult bindingResult) {
         if (checkUserExist(user)) {
             bindingResult.addError(new FieldError(
                     "user",
                     "email",
                     "User with this email: " + user.getEmail() + " is exist!"));
         }
-        return bindingResult.hasErrors();
+        return !bindingResult.hasErrors();
     }
-    public Boolean updateValidation(User user, BindingResult bindingResult) {
+    public Boolean updateUserValidation(User user, BindingResult bindingResult) {
         if(checkUserExist(user)){
             User userFromDb = userRepo.findByEmail(user.getEmail());
             if (!userFromDb.getId().equals(user.getId())) {
@@ -63,6 +63,6 @@ public class UserService {
                         "User with this email: " + user.getEmail() + " is exist!"));
             }
         }
-        return bindingResult.hasErrors();
+        return !bindingResult.hasErrors();
     }
 }

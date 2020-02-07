@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                     <td>Capacity</td>
-                    <td><input type="text" th:field="*{capacity}" placeholder="Capacity"></td>
+                    <td><input type="number" th:field="*{capacity}" placeholder="Capacity"></td>
                     <td th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" style="color: crimson"></td>
                 </tr>
                 <tr>
@@ -38,12 +38,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Start</td>
-                    <td><input type="time" name="start" placeholder="Start work"></td>
+                    <td>Start work</td>
+                    <td><input type="time" th:field="*{startTime}" placeholder="Start time"></td>
+                    <td th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}" style="color: crimson"></td>
                 </tr>
                 <tr>
-                    <td>Finish</td>
-                    <td><input type="time" name="finish" placeholder="Finish work"></td>
+                    <td>Finish work</td>
+                    <td><input type="time" th:field="*{finishTime}" placeholder="Finish time"></td>
+                    <td th:if="${#fields.hasErrors('finishTime')}" th:errors="*{finishTime}" style="color: crimson"></td>
                 </tr>
                 <tr>
                     <td><input type="submit" value="Update Lounge"></td>

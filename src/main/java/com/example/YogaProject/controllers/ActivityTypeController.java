@@ -39,11 +39,12 @@ public class ActivityTypeController {
     @PostMapping("/create-activityType")
     public String createActivityType(@Valid ActivityType activityType, BindingResult bindingResult){
         if(activityTypeService.activityTypeValidation(activityType,bindingResult)) {
+            activityType.setAvailable(true);
+            activityTypeService.saveActivityType(activityType);
+            return "redirect:/activityTypes";
+        } else {
             return "create-activityType";
         }
-        activityType.setAvailable(true);
-        activityTypeService.saveActivityType(activityType);
-        return "redirect:/activityTypes";
     }
 
     @GetMapping("/delete-activityType/{id}")
@@ -63,9 +64,10 @@ public class ActivityTypeController {
     public String updateActivityType(@Valid ActivityType activityType,
                                      BindingResult bindingResult){
         if(activityTypeService.activityTypeValidation(activityType,bindingResult)) {
+            activityTypeService.saveActivityType(activityType);
+            return "redirect:/activityTypes";
+        } else {
             return "update-activityType";
         }
-        activityTypeService.saveActivityType(activityType);
-        return "redirect:/activityTypes";
     }
 }

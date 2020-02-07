@@ -36,30 +36,23 @@ public class LoungeService {
         return loungeRepo.getOne(id);
     }
 
-    /*public void parseTime(Lounge lounge, String start, String finish) {
-        LocalTime startTime = LocalTime.parse(start);
-        LocalTime finishTime = LocalTime.parse(finish);
-        lounge.setStartTime(startTime);
-        lounge.setFinishTime(finishTime);
-    }*/
-
 
     private Boolean checkLoungeExist(Lounge lounge) {
         Lounge loungeFromDb = loungeRepo.findByName(lounge.getName());
         return loungeFromDb != null;
     }
 
-    public Boolean createValidation(Lounge lounge, BindingResult bindingResult){
+    public Boolean createLoungeValidation(Lounge lounge, BindingResult bindingResult){
         if (checkLoungeExist(lounge)) {
             bindingResult.addError(new FieldError(
                     "lounge",
                     "name",
                     "Lounge with name: " + lounge.getName() + " is exist!"));
         }
-        return bindingResult.hasErrors();
+        return !bindingResult.hasErrors();
     }
 
-    public Boolean updateValidation(Lounge lounge, BindingResult bindingResult) {
+    public Boolean updateLoungeValidation(Lounge lounge, BindingResult bindingResult) {
         if(checkLoungeExist(lounge)){
             Lounge loungeFromDb = loungeRepo.findByName(lounge.getName());
             if (!loungeFromDb.getId().equals(lounge.getId())) {
@@ -69,6 +62,6 @@ public class LoungeService {
                         "Lounge with name: " + lounge.getName() + " is exist!"));
             }
         }
-        return bindingResult.hasErrors();
+        return !bindingResult.hasErrors();
     }
 }

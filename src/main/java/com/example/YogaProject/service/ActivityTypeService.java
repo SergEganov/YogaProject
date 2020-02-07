@@ -47,6 +47,6 @@ public class ActivityTypeService {
                     "name",
                     "Activity type with name: " + activityType.getName() + " is exist!"));
         }
-        return bindingResult.hasErrors();
+        return !bindingResult.hasErrors();
     }
 }

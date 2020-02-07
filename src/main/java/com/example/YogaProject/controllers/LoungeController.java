@@ -4,17 +4,14 @@ import com.example.YogaProject.domain.Lounge;
 import com.example.YogaProject.service.ActivityTypeService;
 import com.example.YogaProject.service.LoungeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -46,17 +43,15 @@ public class LoungeController {
     @PostMapping("/create-lounge")
     public String createLounge(@Valid Lounge lounge,
                                BindingResult bindingResult,
-                               @RequestParam ("start") @DateTimeFormat(pattern = "HH:mm") LocalTime start,
-                               @RequestParam ("finish") @DateTimeFormat(pattern = "HH:mm") LocalTime finish,
                                Model model){
-        lounge.setStartTime(start);
-        lounge.setFinishTime(finish);
-        if (loungeService.createValidation(lounge, bindingResult)) {
+        if (loungeService.createLoungeValidation(lounge, bindingResult)) {
+            loungeService.save(lounge);
+            return "redirect:/lounges";
+        } else {
             model.addAttribute("activityTypes", activityTypeService.findAll());
             return "create-lounge";
         }
-        loungeService.save(lounge);
-        return "redirect:/lounges";
+
     }
 
     @GetMapping("delete-lounge/{id}")
@@ -76,16 +71,13 @@ public class LoungeController {
     @PostMapping("/update-lounge")
     public String updateLounge(@Valid Lounge lounge,
                                BindingResult bindingResult,
-                               @RequestParam ("start") @DateTimeFormat(pattern = "HH:mm") LocalTime start,
-                               @RequestParam ("finish") @DateTimeFormat(pattern = "HH:mm") LocalTime finish,
                                Model model){
-        lounge.setStartTime(start);
-        lounge.setFinishTime(finish);
-        if (loungeService.updateValidation(lounge, bindingResult)) {
+        if (loungeService.updateLoungeValidation(lounge, bindingResult)) {
+            loungeService.save(lounge);
+            return "redirect:/lounges";
+        } else {
             model.addAttribute("activityTypes", activityTypeService.findAll());
             return "update-lounge";
         }
-        loungeService.save(lounge);
-        return "redirect:/lounges";
     }
 }

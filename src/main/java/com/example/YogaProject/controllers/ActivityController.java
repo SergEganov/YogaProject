@@ -9,14 +9,13 @@ import com.example.YogaProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -52,12 +51,16 @@ public class ActivityController {
     }
 
     @PostMapping("/create-activity")
-    public String createActivity(Activity activity,
-                                 @RequestParam String start,
-                                 @RequestParam String finish) {
-        ActivityController.parseTime(activity, start, finish);
-        activityService.saveActivity(activity);
-        return "redirect:/activities";
+    public String createActivity(@Valid Activity activity,
+                                 BindingResult bindingResult,
+                                 Model model) {
+        if(bindingResult.hasErrors() || activityService.checkIllegalActivityTime(activity,bindingResult)) {
+            model.addAttribute("lounges", loungeService.findAll());
+            model.addAttribute("activityTypes", activityTypeService.findAll());
+            return "create-activity";
+        }
+            activityService.saveActivity(activity);
+            return "redirect:/activities";
     }
 
     @GetMapping("/delete-activity/{id}")
@@ -76,12 +79,16 @@ public class ActivityController {
     }
 
     @PostMapping("/update-activity")
-    public String updateActivity(Activity activity,
-                                 @RequestParam String start,
-                                 @RequestParam String finish) {
-        ActivityController.parseTime(activity, start, finish);
-        activityService.saveActivity(activity);
-        return "redirect:/activities";
+    public String updateActivity(@Valid Activity activity,
+                                 BindingResult bindingResult,
+                                 Model model) {
+        if(bindingResult.hasErrors() || activityService.checkIllegalActivityTime(activity,bindingResult)) {
+            model.addAttribute("lounges", loungeService.findAll());
+            model.addAttribute("activityTypes", activityTypeService.findAll());
+            return "update-activity";
+        }
+            activityService.saveActivity(activity);
+            return "redirect:/activities";
     }
 
     @GetMapping("/sign-up/{id}")
@@ -126,13 +133,5 @@ public class ActivityController {
         activity.getUsers().remove(userService.findById(user_id));
         activityService.saveActivity(activity);
         return "redirect:/registered-users/" + activity_id;
-    }
-
-    private static void parseTime(Activity activity, String start, String finish) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDateTime dateTime = LocalDateTime.parse(start, dtf);
-        LocalDateTime dateTime1 = LocalDateTime.parse(finish,dtf);
-        activity.setStartDateTime(dateTime);
-        activity.setFinishDateTime(dateTime1);
     }
 }

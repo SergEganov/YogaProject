@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
@@ -83,8 +82,28 @@ public class Activity {
     public Activity() {
     }
 
-    public String formattedData(LocalDateTime localDateTime){
-        return localDateTime.format(DateTimeFormatter.ofPattern("HH:mm, EEEE, dd.MM.yyyy"));
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Activity activity = (Activity) o;
+        return id.equals(activity.id) &&
+                name.equals(activity.name) &&
+                capacity.equals(activity.capacity) &&
+                startTime.equals(activity.startTime) &&
+                finishTime.equals(activity.finishTime) &&
+                dateOfActivity.equals(activity.dateOfActivity) &&
+                price.equals(activity.price) &&
+                Objects.equals(isAvailable, activity.isAvailable) &&
+                Objects.equals(mentor, activity.mentor) &&
+                activityType.equals(activity.activityType) &&
+                lounge.equals(activity.lounge) &&
+                Objects.equals(users, activity.users);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, capacity, startTime, finishTime, dateOfActivity, price, isAvailable, mentor, activityType, lounge, users);
     }
 
     public LocalDateTime getStartDateTime(){

@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -92,20 +91,27 @@ public class ActivityController {
     }
 
     @GetMapping("/sign-up/{id}")
-    public String signUpForm(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes){
+    public String signUpForm(@PathVariable("id") Long id, Model model){
         Activity activity = activityService.findById(id);
-        model.addAttribute("activity", activity);
-        if (!activityService.checkForSignUp(activity)) {
-            redirectAttributes.addFlashAttribute("message", "Запись окончена/нет мест");
+        if (!activityService.checkTimeForSignUp(activity)) {
             return "redirect:/activities";
         }
+        model.addAttribute("id", id);
         model.addAttribute("user", new User());
         return "sign-up";
     }
 
     @PostMapping("/sign-up/{id}")
-    public String signUp(@PathVariable ("id") Long id, User user) {
+    public String signUp(@PathVariable ("id") Long id,
+                         @Valid User user,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "sign-up";
+        }
         Activity activity = activityService.findById(id);
+        if (userService.checkUserAlreadySigned(user, activity, bindingResult)) {
+            return "sign-up";
+        }
         User userFromDb =  userService.findByEmail(user.getEmail());
         if(userFromDb == null) {
             userService.saveUser(user);

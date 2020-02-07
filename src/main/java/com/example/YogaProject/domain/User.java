@@ -46,7 +46,6 @@ public class User {
     @Column(name = "birthday")
     private LocalDate birth;
 
-    @NotNull
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)

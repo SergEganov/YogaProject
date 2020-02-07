@@ -40,13 +40,19 @@ public class UserController {
     public String createUser(@Valid User user,
                              BindingResult bindingResult,
                              Model model) {
-       if (userService.createUserValidation(user, bindingResult)) {
+        if (bindingResult.hasErrors() || !userService.createUserValidation(user, bindingResult)) {
+            model.addAttribute("roles", Role.values());
+            return "create-user";
+        }
+        userService.saveUser(user);
+        return "redirect:/users";
+       /*if (userService.createUserValidation(user, bindingResult)) {
            userService.saveUser(user);
            return "redirect:/users";
        } else {
            model.addAttribute("roles", Role.values());
            return "create-user";
-       }
+       }*/
     }
 
     @GetMapping("delete-user/{id}")

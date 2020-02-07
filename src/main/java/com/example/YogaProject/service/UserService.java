@@ -1,5 +1,6 @@
 package com.example.YogaProject.service;
 
+import com.example.YogaProject.domain.Activity;
 import com.example.YogaProject.domain.User;
 import com.example.YogaProject.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,16 @@ public class UserService {
             }
         }
         return !bindingResult.hasErrors();
+    }
+
+    public boolean checkUserAlreadySigned(User user, Activity activity, BindingResult bindingResult) {
+        User userFromDb = userRepo.findByEmail(user.getEmail());
+        if (activity.getUsers().contains(userFromDb)) {
+            bindingResult.addError(new FieldError(
+                    "user",
+                    "email",
+                    "Activity is already have user with this email: " + user.getEmail()));
+        }
+        return bindingResult.hasErrors();
     }
 }

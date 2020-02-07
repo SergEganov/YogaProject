@@ -2,6 +2,7 @@ package com.example.YogaProject.service;
 
 import com.example.YogaProject.domain.Activity;
 import com.example.YogaProject.domain.Lounge;
+import com.example.YogaProject.domain.User;
 import com.example.YogaProject.repos.ActivityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class ActivityService {
     }
 
     public Activity findById(Long id) {
-        return activityRepo.getOne(id);
+        return activityRepo.findById(id).orElse(null);
     }
 
     public List<Activity> findAll() {
@@ -42,10 +43,10 @@ public class ActivityService {
         return activityRepo.findByLoungeAndDateOfActivityOrderByStartTimeAsc(lounge, dateOfActivity);
     }
 
-    public boolean checkForSignUp(Activity activity) {
+    public boolean checkTimeForSignUp(Activity activity) {
         LocalDateTime todayDateTime = LocalDateTime.now();
         LocalDateTime activityDateTime = activity.getStartDateTime();
-        if (activityDateTime.minusHours(1).minusMinutes(30).isBefore(todayDateTime)) {
+        if (activityDateTime.plusMinutes(30).isBefore(todayDateTime)) {
             return false;
         }
         if (activity.getUsers().size() >= activity.getCapacity()) {
@@ -55,23 +56,34 @@ public class ActivityService {
     }
 
     public boolean checkIllegalActivityTime(Activity activity, BindingResult bindingResult){
+        if(!checkStartAndFinishTime(activity,bindingResult)) {
+            return bindingResult.hasErrors();
+            // проверяем корректное время
+        }
 
         if(!checkLoungeCapacity(activity, bindingResult)) {
             return bindingResult.hasErrors();
+            // проверяем по размеру помещения
         }
 
         if (!checkLoungeWorkPeriod(activity,bindingResult)) {
             return bindingResult.hasErrors();
+            // проверяем по рабочему времени
         }
 
         List<Activity> activities = findByLoungeAndDateOfActivityOrderByStartTimeAsc(activity.getLounge(), activity.getDateOfActivity());
-
+        if (activity.getId() != null) {
+            //если идет операция update - выталкиваем текущую дату из списка проверок
+            Activity activityFromDb = findById(activity.getId());
+            activities.remove(activityFromDb);
+        }
         if (activities.isEmpty()) {
             return bindingResult.hasErrors();
         }
         for(Activity act: activities) {
             if (!((activity.getStartTime().isBefore(act.getStartTime()) && activity.getFinishTime().plusMinutes(29).isBefore(act.getStartTime())) ||
             activity.getStartTime().isAfter(act.getFinishTime().plusMinutes(29)))) {
+
                 bindingResult.addError(new FieldError(
                         "activity",
                         "startTime",
@@ -118,6 +130,19 @@ public class ActivityService {
                     "capacity",
                     "Check the capacity of the event: " + activity.getCapacity()
                             + ". The lounge max capacity is " + activity.getLounge().getCapacity()));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkStartAndFinishTime(Activity activity, BindingResult bindingResult){
+        if (activity.getStartTime().isAfter(activity.getFinishTime())) {
+            bindingResult.addError(new FieldError(
+                    "activity",
+                    "finishTime",
+                    "Check the time of the event: from " + activity.getStartTime()
+                            + " to " + activity.getFinishTime()
+                            + ". the finish can't be before the start"));
             return false;
         }
         return true;

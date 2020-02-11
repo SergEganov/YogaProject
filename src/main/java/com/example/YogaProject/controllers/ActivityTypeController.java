@@ -3,17 +3,21 @@ package com.example.YogaProject.controllers;
 import com.example.YogaProject.domain.ActivityType;
 import com.example.YogaProject.service.ActivityTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
+@RequestMapping("/activity-types")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class ActivityTypeController {
 
     private final ActivityTypeService activityTypeService;
@@ -23,17 +27,17 @@ public class ActivityTypeController {
         this.activityTypeService = activityTypeService;
     }
 
-    @GetMapping("/activityTypes")
+    @GetMapping
     public String findAll(Model model){
         List<ActivityType> activityTypes = activityTypeService.findAll();
         model.addAttribute("activityTypes", activityTypes);
-        return "activityTypes";
+        return "activityType/activityTypes";
     }
 
     @GetMapping("/create-activityType")
     public String createActivityTypeForm(Model model){
         model.addAttribute("activityType", new ActivityType());
-        return "create-activityType";
+        return "activityType/create-activityType";
     }
 
     @PostMapping("/create-activityType")
@@ -41,23 +45,23 @@ public class ActivityTypeController {
         if(activityTypeService.activityTypeValidation(activityType,bindingResult)) {
             activityType.setAvailable(true);
             activityTypeService.saveActivityType(activityType);
-            return "redirect:/activityTypes";
+            return "redirect:/activity-types";
         } else {
-            return "create-activityType";
+            return "activityType/create-activityType";
         }
     }
 
     @GetMapping("/delete-activityType/{id}")
     public String deleteActivityType(@PathVariable("id") Long id){
         activityTypeService.deleteById(id);
-        return "redirect:/activityTypes";
+        return "redirect:/activity-types";
     }
 
     @GetMapping("/update-activityType/{id}")
     public String updateActivityTypeForm(@PathVariable("id") Long id, Model model){
         ActivityType activityType = activityTypeService.findById(id);
         model.addAttribute("activityType", activityType);
-        return "update-activityType";
+        return "activityType/update-activityType";
     }
 
     @PostMapping("/update-activityType")
@@ -65,9 +69,9 @@ public class ActivityTypeController {
                                      BindingResult bindingResult){
         if(activityTypeService.activityTypeValidation(activityType,bindingResult)) {
             activityTypeService.saveActivityType(activityType);
-            return "redirect:/activityTypes";
+            return "redirect:/activity-types";
         } else {
-            return "update-activityType";
+            return "activityType/update-activityType";
         }
     }
 }

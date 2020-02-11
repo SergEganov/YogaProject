@@ -5,18 +5,23 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<p th:text="'Hello, ' + ${main} + '!'"/>
+<span th:text="'Hello bro!'"></span>
 <div>
     <a href="/activities">Activities</a>
 </div>
-<div>
+<div th:if="${admin}">
     <a href="/users">List of users</a>
 </div>
-<div>
-    <a href="/activityTypes">Activity Types</a>
+<div th:if="${admin}">
+    <a href="/activity-types">Activity Types</a>
+</div>
+<div th:if="${admin}">
+    <a href="/lounges">Lounges</a>
 </div>
 <div>
-    <a href="/lounges">Lounges</a>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
 </div>
 </body>
 </html>

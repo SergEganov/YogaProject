@@ -5,7 +5,7 @@
     <title>Update User</title>
 </head>
     <body>
-        <form action="#" th:action="@{/update-user}" th:object="${user}" method="post">
+        <form action="#" th:action="@{/users/update-user}" th:object="${user}" method="post">
             <table>
                 <tr>
                     <td>ID</td>
@@ -20,6 +20,9 @@
                     <td>Last Name</td>
                     <td><input type="text" th:field="*{lastName}" placeholder="Last name"></td>
                     <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: crimson"></td>
+                </tr>
+                <tr>
+                    <td><input readonly type="hidden" th:field="*{password}" placeholder="Password"></td>
                 </tr>
                 <tr>
                     <td>Email</td>

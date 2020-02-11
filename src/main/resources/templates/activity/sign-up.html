@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8">
-    <title>Create user</title>
-</head>
+<meta charset="UTF-8">
+<title>Update activity</title>
 <body>
-
-<form action="#" th:action="@{/create-user}" th:object="${user}" method="post">
-    <table>
+    <form action="#" th:action="@{/activities/sign-up/{id}(id=${id})}" th:object="${user}" method="post">
+        <table>
         <tr>
             <td>First Name</td>
             <td><input type="text" th:field="*{firstName}" placeholder="First name"></td>
@@ -29,27 +26,12 @@
             <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" style="color: crimson"></td>
         </tr>
         <tr>
-            <td>Birthday</td>
-            <td><input type="date" th:field="*{birth}" placeholder="Birthday"></td>
-            <td th:if="${#fields.hasErrors('birth')}" th:errors="*{birth}" style="color: crimson"></td>
+            <td><input type="submit" value="Sign up"></td>
         </tr>
         <tr>
-            <td>
-            <select th:field="*{roles}" multiple>
-                <option th:each="role : ${roles}"
-                        th:value="${role}"
-                        th:text="${role}">
-                </option>
-            </select>
-            </td>
+            <td><a href="/activities">Go to activities list</a></td>
         </tr>
-        <tr>
-            <td><input type="submit" value="Create User"></td>
-        </tr>
-        <tr>
-            <td><a href="/users">Go to users list</a></td>
-        </tr>
-    </table>
-</form>
+        </table>
+    </form>
 </body>
 </html>

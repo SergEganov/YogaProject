@@ -2,7 +2,6 @@ package com.example.YogaProject.service;
 
 import com.example.YogaProject.domain.Activity;
 import com.example.YogaProject.domain.Lounge;
-import com.example.YogaProject.domain.User;
 import com.example.YogaProject.repos.ActivityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

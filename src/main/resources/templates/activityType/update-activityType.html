@@ -4,7 +4,7 @@
     <title>Create user</title>
 </head>
     <body>
-        <form action="#" th:action="@{/update-activityType}" th:object="${activityType}" method="post">
+        <form action="#" th:action="@{/activity-types/update-activityType}" th:object="${activityType}" method="post">
             <table>
                 <tr>
                     <td>ID</td>
@@ -23,7 +23,7 @@
                     <td><input type="submit" value="Update activityType"></td>
                 </tr>
                 <tr>
-                    <td><a href="/activityTypes">Go to activity types list</a></td>
+                    <td><a href="/activity-types">Go to activity types list</a></td>
                 </tr>
             </table>
         </form>

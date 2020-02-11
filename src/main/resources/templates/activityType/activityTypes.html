@@ -19,13 +19,13 @@
                 <td th:text="${activityType.id}"></td>
                 <td th:text="${activityType.name}"></td>
                 <td th:text="${activityType.available}"></td>
-                <td><a th:href="@{/update-activityType/{id}(id=${activityType.id})}">Edit</a></td>
-                <td><a th:href="@{/delete-activityType/{id}(id=${activityType.id})}">Delete</a></td>
+                <td><a th:href="@{/activity-types/update-activityType/{id}(id=${activityType.id})}">Edit</a></td>
+                <td><a th:href="@{/activity-types/delete-activityType/{id}(id=${activityType.id})}">Delete</a></td>
             </tr>
             </tbody>
         </table>
     </div>
-    <p><a href="/create-activityType">Create activity type</a></p>
+    <p><a href="/activity-types/create-activityType">Create activity type</a></p>
     <div>
         <a href="/">To main page</a>
     </div>

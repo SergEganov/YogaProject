@@ -31,13 +31,13 @@
                 <li th:each="u : ${lounge.activityTypes}" th:text="${u.name}"></li>
             </ul>
         </td>
-        <td><a th:href="@{/update-lounge/{id}(id=${lounge.id})}">Edit</a></td>
-        <td><a th:href="@{/delete-lounge/{id}(id=${lounge.id})}">Delete</a></td>
+        <td><a th:href="@{/lounges/update-lounge/{id}(id=${lounge.id})}">Edit</a></td>
+        <td><a th:href="@{/lounges/delete-lounge/{id}(id=${lounge.id})}">Delete</a></td>
     </tr>
     </tbody>
 </table>
 </div>
-<p><a href="/create-lounge">Create lounge</a></p>
+<p><a href="/lounges/create-lounge">Create lounge</a></p>
 <p><a href="/">Go to main page</a></p>
 </div>
 </body>

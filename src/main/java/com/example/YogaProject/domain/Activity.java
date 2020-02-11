@@ -57,6 +57,7 @@ public class Activity {
     @Column(name = "available")
     private Boolean isAvailable;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mentor_id")
     private User mentor;

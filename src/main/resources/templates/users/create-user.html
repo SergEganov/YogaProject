@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Create user</title>
+</head>
+<body>
+
+<form action="#" th:action="@{/users/create-user}" th:object="${user}" method="post">
+    <table>
+        <tr>
+            <td>First Name</td>
+            <td><input type="text" th:field="*{firstName}" placeholder="First name"></td>
+            <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Last Name</td>
+            <td><input type="text" th:field="*{lastName}" placeholder="Last name"></td>
+            <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="text" th:field="*{password}" placeholder="Password"></td>
+            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="text" th:field="*{email}" placeholder="Email"></td>
+            <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Phone number</td>
+            <td><input type="text" th:field="*{phoneNumber}" placeholder="Phone number"></td>
+            <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Birthday</td>
+            <td><input type="date" th:field="*{birth}" placeholder="Birthday"></td>
+            <td th:if="${#fields.hasErrors('birth')}" th:errors="*{birth}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>
+                <div th:if="${admin}">
+                    <select th:field="*{roles}" multiple>
+                        <option th:each="role : ${roles}"
+                                th:value="${role}"
+                                th:text="${role}">
+                        </option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Create User"></td>
+        </tr>
+        <tr>
+            <td><a href="/users">Go to users list</a></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

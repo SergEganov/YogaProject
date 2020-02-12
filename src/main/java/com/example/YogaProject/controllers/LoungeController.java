@@ -4,7 +4,6 @@ import com.example.YogaProject.domain.Lounge;
 import com.example.YogaProject.service.ActivityTypeService;
 import com.example.YogaProject.service.LoungeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +17,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/lounges")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class LoungeController {
 
     private final LoungeService loungeService;

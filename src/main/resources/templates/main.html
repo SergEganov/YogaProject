@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -9,18 +11,29 @@
 <div>
     <a href="/activities">Activities</a>
 </div>
-<div th:if="${admin}">
+<div sec:authorize="hasRole('ROLE_ADMIN')">
     <a href="/users">List of users</a>
 </div>
-<div th:if="${admin}">
+<div sec:authorize="hasRole('ADMIN')">
     <a href="/activity-types">Activity Types</a>
 </div>
-<div th:if="${admin}">
+<div sec:authorize="hasRole('ADMIN')">
     <a href="/lounges">Lounges</a>
 </div>
-<div>
+<!--<div>
     <form th:action="@{/logout}" method="post">
         <input type="submit" value="Sign Out"/>
+    </form>
+</div>-->
+<div sec:authorize="!isAuthenticated()">
+    <a href="/login"><button>Login</button></a>
+    <form th:action="@{/registration}" method="get">
+        <input type="submit" value="Registration"/>
+    </form>
+</div>
+<div sec:authorize="isAuthenticated()">
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Logout"/>
     </form>
 </div>
 </body>

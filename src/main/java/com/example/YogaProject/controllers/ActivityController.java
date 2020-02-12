@@ -8,8 +8,6 @@ import com.example.YogaProject.service.ActivityTypeService;
 import com.example.YogaProject.service.LoungeService;
 import com.example.YogaProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,32 +38,28 @@ public class ActivityController {
     }
 
     @GetMapping
-    public String findAll(Model model,
-                          @AuthenticationPrincipal User user) {
-        model.addAttribute("admin", userService.userIsAdmin(user));
+    public String findAll(Model model) {
         List<Activity> activities = activityService.findAll();
         model.addAttribute("activities", activities);
         return "activity/activities";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/create-activity")
     public String createActivityForm(Model model){
         model.addAttribute("lounges", loungeService.findAll());
         model.addAttribute("activityTypes", activityTypeService.findAll());
         model.addAttribute("activity", new Activity());
-        model.addAttribute("mentors", userService.findByRolesContains(Role.MENTOR));
+        model.addAttribute("mentors", userService.findByRolesContains(Role.ROLE_MENTOR));
         return "activity/create-activity";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/create-activity")
     public String createActivity(@Valid Activity activity,
                                  BindingResult bindingResult,
                                  Model model) {
         if(bindingResult.hasErrors() || activityService.checkIllegalActivityTime(activity,bindingResult)) {
             model.addAttribute("activityTypes", activityTypeService.findAll());
-            model.addAttribute("mentors", userService.findByRolesContains(Role.MENTOR));
+            model.addAttribute("mentors", userService.findByRolesContains(Role.ROLE_MENTOR));
             model.addAttribute("lounges", loungeService.findAll());
             return "activity/create-activity";
         }
@@ -73,25 +67,22 @@ public class ActivityController {
             return "redirect:/activities";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/delete-activity/{id}")
     public String deleteActivity(@PathVariable("id") Long id) {
         activityService.deleteById(id);
         return "redirect:/activities";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/update-activity/{id}")
     public String updateActivityForm(@PathVariable("id") Long id, Model model){
         model.addAttribute("lounges", loungeService.findAll());
         model.addAttribute("activityTypes", activityTypeService.findAll());
         Activity activity = activityService.findById(id);
         model.addAttribute("activity", activity);
-        model.addAttribute("mentors", userService.findByRolesContains(Role.MENTOR));
+        model.addAttribute("mentors", userService.findByRolesContains(Role.ROLE_MENTOR));
         return "activity/update-activity";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/update-activity")
     public String updateActivity(@Valid Activity activity,
                                  BindingResult bindingResult,
@@ -99,7 +90,7 @@ public class ActivityController {
         if(bindingResult.hasErrors() || activityService.checkIllegalActivityTime(activity,bindingResult)) {
             model.addAttribute("lounges", loungeService.findAll());
             model.addAttribute("activityTypes", activityTypeService.findAll());
-            model.addAttribute("mentors", userService.findByRolesContains(Role.MENTOR));
+            model.addAttribute("mentors", userService.findByRolesContains(Role.ROLE_MENTOR));
             return "activity/update-activity";
         }
             activityService.saveActivity(activity);
@@ -139,7 +130,6 @@ public class ActivityController {
         return "redirect:/activities";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/registered-users/{id}")
     public String checkRegisteredUsers(@PathVariable("id") Long id,
                                        Model model){
@@ -149,7 +139,6 @@ public class ActivityController {
         return "users/users-on-activity";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/delete-user-from-activity/{activity_id}/{user_id}")
     public String deleteUserFromActivity(@PathVariable("activity_id") Long activity_id,
                                          @PathVariable("user_id") Long user_id) {

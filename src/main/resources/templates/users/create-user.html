@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
-<head>
+<!--<head>
     <meta charset="UTF-8">
     <title>Create user</title>
 </head>
@@ -40,7 +40,7 @@
         </tr>
         <tr>
             <td>
-                <div th:if="${admin}">
+                <div>
                     <select th:field="*{roles}" multiple>
                         <option th:each="role : ${roles}"
                                 th:value="${role}"
@@ -58,5 +58,5 @@
         </tr>
     </table>
 </form>
-</body>
+</body>-->
 </html>

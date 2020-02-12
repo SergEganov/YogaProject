@@ -1,9 +1,7 @@
 package com.example.YogaProject.controllers;
 
-import com.example.YogaProject.domain.User;
 import com.example.YogaProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +21,7 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("admin", userService.userIsAdmin(user));
+    public String main(Model model) {
         return "main";
     }
 }

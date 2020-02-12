@@ -1,18 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Create user</title>
+</head>
 <body>
-<!--<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>-->
-Add new user
-<span th:text="${message}"></span>
-<form th:action="@{/registration}" method="post">
-    <div><label> Email : <input type="text" name="email"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
+
+<form action="#" th:action="@{/registration}" th:object="${user}" method="post">
+    <table>
+        <tr>
+            <td>First Name</td>
+            <td><input type="text" th:field="*{firstName}" placeholder="First name"></td>
+            <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Last Name</td>
+            <td><input type="text" th:field="*{lastName}" placeholder="Last name"></td>
+            <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="text" th:field="*{password}" placeholder="Password"></td>
+            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: crimson"></td>
+
+        </tr>
+        <tr>
+            <td>Confirm Password</td>
+            <td><input type="text" th:field="*{passwordConfirm}" placeholder="Confirm password"></td>
+            <td th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}" style="color: crimson"></td>
+
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="text" th:field="*{email}" placeholder="Email"></td>
+            <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Phone number</td>
+            <td><input type="text" th:field="*{phoneNumber}" placeholder="Phone number"></td>
+            <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" style="color: crimson"></td>
+        </tr>
+        <tr>
+            <td>Birthday</td>
+            <td><input type="date" th:field="*{birth}" placeholder="Birthday"></td>
+            <td th:if="${#fields.hasErrors('birth')}" th:errors="*{birth}" style="color: crimson"></td>
+        </tr>
+        <!--<tr>
+            <td>
+                <div>
+                    <select th:field="*{roles}" multiple>
+                        <option th:each="role : ${roles}"
+                                th:value="${role}"
+                                th:text="${role}">
+                        </option>
+                    </select>
+                </div>
+            </td>
+        </tr>-->
+        <tr>
+            <td><input type="submit" value="Register"></td>
+        </tr>
+        <tr>
+            <td><a href="/main">Go to users list</a></td>
+        </tr>
+    </table>
 </form>
 </body>
 </html>

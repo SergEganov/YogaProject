@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org/">
 <body>
-<!--<div th:if="${param.error}">
-    Invalid username and password.
+<div th:if="${param.error}">
+    Invalid email or password.
 </div>
 <div th:if="${param.logout}">
     You have been logged out.
-</div>-->
+</div>
 Login page
 <form th:action="@{/login}" method="post">
     <div><label> Email : <input type="text" name="username"/> </label></div>
     <div><label> Password: <input type="password" name="password"/> </label></div>
     <div><input type="submit" value="Sign In"/></div>
 </form>
-<a href="/users/create-user">Registration</a>
+<a href="/registration">Registration</a>
 </body>
 </html>

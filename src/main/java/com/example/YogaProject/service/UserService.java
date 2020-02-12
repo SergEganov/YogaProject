@@ -8,21 +8,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
+    @PersistenceContext
+    private EntityManager em;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final UserRepo userRepo;
 
     @Autowired
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepo = userRepo;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+    public boolean isUserExists() {
+        return userRepo.isUserExists();
     }
 
     public User findById(Long id) {
@@ -34,6 +45,9 @@ public class UserService implements UserDetailsService {
     }
 
     public void saveUser(User user) {
+        if (userRepo.findByEmail(user.getEmail()) == null) {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
         userRepo.save(user);
     }
 
@@ -54,7 +68,7 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean userIsAdmin(User user) {
-        return user != null && user.getRoles().contains(Role.ADMIN);
+        return user != null && user.getRoles().contains(Role.ROLE_ADMIN);
         }
 
     private Boolean checkUserExist(User user) {
@@ -101,6 +115,10 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         //В шаблоне на реквест парам username. Если меняем - ничего не приходит
-        return userRepo.findByEmail(email);
+        User user = userRepo.findByEmail(email);
+        if(user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return user;
     }
 }

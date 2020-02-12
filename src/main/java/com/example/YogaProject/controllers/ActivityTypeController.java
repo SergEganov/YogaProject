@@ -3,7 +3,6 @@ package com.example.YogaProject.controllers;
 import com.example.YogaProject.domain.ActivityType;
 import com.example.YogaProject.service.ActivityTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +16,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/activity-types")
-@PreAuthorize("hasAuthority('ADMIN')")
 public class ActivityTypeController {
 
     private final ActivityTypeService activityTypeService;

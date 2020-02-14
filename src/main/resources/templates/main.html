@@ -3,11 +3,14 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Starting Yoga</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
 <span th:text="'Hello bro!'"></span>
+<div sec:authorize="isAuthenticated()">
+    <span sec:authentication="name"></span>
+</div>
 <div>
     <a href="/activities">Activities</a>
 </div>
@@ -20,11 +23,6 @@
 <div sec:authorize="hasRole('ADMIN')">
     <a href="/lounges">Lounges</a>
 </div>
-<!--<div>
-    <form th:action="@{/logout}" method="post">
-        <input type="submit" value="Sign Out"/>
-    </form>
-</div>-->
 <div sec:authorize="!isAuthenticated()">
     <a href="/login"><button>Login</button></a>
     <form th:action="@{/registration}" method="get">

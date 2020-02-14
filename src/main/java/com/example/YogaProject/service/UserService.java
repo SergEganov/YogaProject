@@ -13,15 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
-    @PersistenceContext
-    private EntityManager em;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -32,12 +28,13 @@ public class UserService implements UserDetailsService {
         this.userRepo = userRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-    public boolean isUserExists() {
-        return userRepo.isUserExists();
+
+    public boolean isUsersExists() {
+        return userRepo.isUsersExists();
     }
 
     public User findById(Long id) {
-        return userRepo.getOne(id);
+        return userRepo.findById(id).orElse(null);
     }
 
     public List<User> findAll() {
@@ -45,10 +42,13 @@ public class UserService implements UserDetailsService {
     }
 
     public void saveUser(User user) {
-        if (userRepo.findByEmail(user.getEmail()) == null) {
+        if(!checkUserExist(user)) {
+            user.getRoles().add(Role.ROLE_USER);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            userRepo.save(user);
+        } else {
+            userRepo.save(user);
         }
-        userRepo.save(user);
     }
 
     public void deleteById(Long id) {
@@ -59,24 +59,27 @@ public class UserService implements UserDetailsService {
         return userRepo.findByEmail(email);
     }
 
-    public User findByLastName(String lastName) {
-        return userRepo.findByLastName(lastName);
-    }
-
     public Set<User> findByRolesContains(Role role){
         return userRepo.findByRolesContains(role);
     }
 
-    public boolean userIsAdmin(User user) {
-        return user != null && user.getRoles().contains(Role.ROLE_ADMIN);
+    public boolean passwordConfirm(User user, BindingResult bindingResult) {
+        if( !user.getPassword().equals(user.getPasswordConfirm())) {
+            bindingResult.addError(new FieldError(
+                    "user",
+                    "passwordConfirm",
+                    "Check password and password confirm - it needs to be equal!"));
+            return false;
         }
+        return true;
+    }
 
-    private Boolean checkUserExist(User user) {
+    public boolean checkUserExist(User user) {
         User userFromDb = userRepo.findByEmail(user.getEmail());
         return userFromDb != null;
     }
 
-    public Boolean createUserValidation(User user, BindingResult bindingResult) {
+    public boolean createUserValidation(User user, BindingResult bindingResult) {
         if (checkUserExist(user)) {
             bindingResult.addError(new FieldError(
                     "user",
@@ -86,16 +89,14 @@ public class UserService implements UserDetailsService {
         }
         return true;
     }
-    public Boolean updateUserValidation(User user, BindingResult bindingResult) {
-        if(checkUserExist(user)){
-            User userFromDb = userRepo.findByEmail(user.getEmail());
-            if (!userFromDb.getId().equals(user.getId())) {
-                bindingResult.addError(new FieldError(
-                        "user",
-                        "email",
-                        "User with this email: " + user.getEmail() + " is exist!"));
-                return false;
-            }
+    public boolean updateUserValidation(User user, BindingResult bindingResult) {
+        User userFromDb = userRepo.findByEmail(user.getEmail());
+        if (!userFromDb.getId().equals(user.getId())) {
+            bindingResult.addError(new FieldError(
+                    "user",
+                    "email",
+                    "User with this email: " + user.getEmail() + " is exist!"));
+            return false;
         }
         return true;
     }

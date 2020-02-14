@@ -24,6 +24,9 @@ public class ActivityTypeService {
     }
 
     public void saveActivityType(ActivityType activityType){
+        if(!checkActivityTypeExist(activityType)) {
+            activityType.setAvailable(true);
+        }
         activityTypeRepo.save(activityType);
     }
 
@@ -32,7 +35,7 @@ public class ActivityTypeService {
     }
 
     public ActivityType findById(Long id){
-        return activityTypeRepo.getOne(id);
+        return activityTypeRepo.findById(id).orElse(null);
     }
 
     private Boolean checkActivityTypeExist(ActivityType activityType) {
@@ -40,13 +43,14 @@ public class ActivityTypeService {
         return activityTypeFromDb != null;
     }
 
-    public Boolean activityTypeValidation(ActivityType activityType, BindingResult bindingResult) {
+    public boolean activityTypeValidation(ActivityType activityType, BindingResult bindingResult) {
         if (checkActivityTypeExist(activityType)) {
             bindingResult.addError(new FieldError(
                     "activityType",
                     "name",
                     "Activity type with name: " + activityType.getName() + " is exist!"));
+            return false;
         }
-        return !bindingResult.hasErrors();
+        return true;
     }
 }

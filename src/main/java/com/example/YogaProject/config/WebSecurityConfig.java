@@ -31,17 +31,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                             "/activities/delete-activity/**", "/activities/update-activity/**",
                             "/activities/registered-users/**", "/activities/delete-user-from-activity/**")
                             .hasRole("ADMIN")
-                    .antMatchers("/", "/main", "/registration", "/activities/", "/activities/sign-up/**").permitAll()
+                    .antMatchers("/", "/registration", "/activities", "/activities/sign-up/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/main")
+                    .defaultSuccessUrl("/")
                     .permitAll()
                 .and()
                     .logout()
                     .permitAll()
-                    .logoutSuccessUrl("/main");
+                    .logoutSuccessUrl("/");
     }
     @Autowired
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

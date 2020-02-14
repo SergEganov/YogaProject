@@ -2,6 +2,7 @@ package com.example.YogaProject.service;
 
 import com.example.YogaProject.domain.Activity;
 import com.example.YogaProject.domain.Lounge;
+import com.example.YogaProject.domain.User;
 import com.example.YogaProject.repos.ActivityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,12 @@ public class ActivityService {
 
     private final ActivityRepo activityRepo;
 
+    private final UserService userService;
+
     @Autowired
-    public ActivityService(ActivityRepo activityRepo) {
+    public ActivityService(ActivityRepo activityRepo, UserService userService) {
         this.activityRepo = activityRepo;
+        this.userService = userService;
     }
 
     public Activity findById(Long id) {
@@ -45,7 +49,7 @@ public class ActivityService {
     public boolean checkTimeForSignUp(Activity activity) {
         LocalDateTime todayDateTime = LocalDateTime.now();
         LocalDateTime activityDateTime = activity.getStartDateTime();
-        if (activityDateTime.plusMinutes(30).isBefore(todayDateTime)) {
+        if (activityDateTime.plusMinutes(30).isBefore(todayDateTime) ) {
             return false;
         }
         if (activity.getUsers().size() >= activity.getCapacity()) {
@@ -54,20 +58,32 @@ public class ActivityService {
         return true;
     }
 
-    public boolean checkIllegalActivityTime(Activity activity, BindingResult bindingResult){
+    public void signUpToActivity(Activity activity,User user) {
+        User userFromDb =  userService.findByEmail(user.getEmail());
+        if(userFromDb == null) {
+            userService.saveUser(user);
+            activity.getUsers().add(userService.findByEmail(user.getEmail()));
+        } else {
+            activity.getUsers().add(userFromDb);
+        }
+       saveActivity(activity);
+    }
+
+    public void signOutFromActivity(Long activity_id, Long user_id) {
+        Activity activity = findById(activity_id);
+        activity.getUsers().remove(userService.findById(user_id));
+        saveActivity(activity);
+    }
+
+    public boolean checkLegalActivityTime(Activity activity, BindingResult bindingResult){
         if(!checkStartAndFinishTime(activity,bindingResult)) {
-            return bindingResult.hasErrors();
-            // проверяем корректное время
+            return false;
         }
-
         if(!checkLoungeCapacity(activity, bindingResult)) {
-            return bindingResult.hasErrors();
-            // проверяем по размеру помещения
+            return false;
         }
-
         if (!checkLoungeWorkPeriod(activity,bindingResult)) {
-            return bindingResult.hasErrors();
-            // проверяем по рабочему времени
+            return false;
         }
 
         List<Activity> activities = findByLoungeAndDateOfActivityOrderByStartTimeAsc(activity.getLounge(), activity.getDateOfActivity());
@@ -77,21 +93,25 @@ public class ActivityService {
             activities.remove(activityFromDb);
         }
         if (activities.isEmpty()) {
-            return bindingResult.hasErrors();
+            return true;
         }
         for(Activity act: activities) {
-            if (!((activity.getStartTime().isBefore(act.getStartTime()) && activity.getFinishTime().plusMinutes(29).isBefore(act.getStartTime())) ||
-            activity.getStartTime().isAfter(act.getFinishTime().plusMinutes(29)))) {
-
+            if (!((activity.getStartTime().isBefore(act.getStartTime())
+                    && activity.getFinishTime().plusMinutes(29).isBefore(act.getStartTime()))
+                    || activity.getStartTime().isAfter(act.getFinishTime().plusMinutes(29)))
+            ) {
                 bindingResult.addError(new FieldError(
                         "activity",
                         "startTime",
-                        "Check activity time - 30 minutes between activities: " + activity.getStartTime() + " " + activity.getFinishTime()
-                                + ". We have the same time activity in schedule " + act.getName() + " " + act.getStartTime() + " " + act.getFinishTime()));
-                return bindingResult.hasErrors();
+                        "Check activity time - 30 minutes between activities: "
+                                + activity.getStartTime()
+                                + " " + activity.getFinishTime()
+                                + ". We have the same time activity in schedule " + act.getName()
+                                + " " + act.getStartTime() + " " + act.getFinishTime()));
+                return false;
             }
         }
-        return bindingResult.hasErrors();
+        return true;
     }
 
     private boolean checkLoungeWorkPeriod(Activity activity, BindingResult bindingResult) {

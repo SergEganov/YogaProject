@@ -29,7 +29,9 @@ public class ActivityController {
     private final UserService userService;
 
     @Autowired
-    public ActivityController(ActivityService activityService, ActivityTypeService activityTypeService, LoungeService loungeService,
+    public ActivityController(ActivityService activityService,
+                              ActivityTypeService activityTypeService,
+                              LoungeService loungeService,
                               UserService userService) {
         this.activityService = activityService;
         this.activityTypeService = activityTypeService;
@@ -57,14 +59,14 @@ public class ActivityController {
     public String createActivity(@Valid Activity activity,
                                  BindingResult bindingResult,
                                  Model model) {
-        if(bindingResult.hasErrors() || activityService.checkIllegalActivityTime(activity,bindingResult)) {
+        if(bindingResult.hasErrors() || !activityService.checkLegalActivityTime(activity,bindingResult)) {
             model.addAttribute("activityTypes", activityTypeService.findAll());
             model.addAttribute("mentors", userService.findByRolesContains(Role.ROLE_MENTOR));
             model.addAttribute("lounges", loungeService.findAll());
             return "activity/create-activity";
         }
-            activityService.saveActivity(activity);
-            return "redirect:/activities";
+        activityService.saveActivity(activity);
+        return "redirect:/activities";
     }
 
     @GetMapping("/delete-activity/{id}")
@@ -87,15 +89,16 @@ public class ActivityController {
     public String updateActivity(@Valid Activity activity,
                                  BindingResult bindingResult,
                                  Model model) {
-        if(bindingResult.hasErrors() || activityService.checkIllegalActivityTime(activity,bindingResult)) {
+        if(bindingResult.hasErrors() || !activityService.checkLegalActivityTime(activity,bindingResult)) {
             model.addAttribute("lounges", loungeService.findAll());
             model.addAttribute("activityTypes", activityTypeService.findAll());
             model.addAttribute("mentors", userService.findByRolesContains(Role.ROLE_MENTOR));
             return "activity/update-activity";
         }
-            activityService.saveActivity(activity);
-            return "redirect:/activities";
+        activityService.saveActivity(activity);
+        return "redirect:/activities";
     }
+    //запись не работает из за наличия пароля у пользователя
 
     @GetMapping("/sign-up/{id}")
     public String signUpForm(@PathVariable("id") Long id, Model model){
@@ -119,14 +122,7 @@ public class ActivityController {
         if (userService.checkUserAlreadySigned(user, activity, bindingResult)) {
             return "activity/sign-up";
         }
-        User userFromDb =  userService.findByEmail(user.getEmail());
-        if(userFromDb == null) {
-            userService.saveUser(user);
-            activity.getUsers().add(userService.findByEmail(user.getEmail()));
-        } else {
-            activity.getUsers().add(userFromDb);
-        }
-        activityService.saveActivity(activity);
+        activityService.signUpToActivity(activity, user);
         return "redirect:/activities";
     }
 
@@ -142,9 +138,7 @@ public class ActivityController {
     @GetMapping("/delete-user-from-activity/{activity_id}/{user_id}")
     public String deleteUserFromActivity(@PathVariable("activity_id") Long activity_id,
                                          @PathVariable("user_id") Long user_id) {
-        Activity activity = activityService.findById(activity_id);
-        activity.getUsers().remove(userService.findById(user_id));
-        activityService.saveActivity(activity);
+        activityService.signOutFromActivity(activity_id, user_id);
         return "redirect:/registered-users/" + activity_id;
     }
 }

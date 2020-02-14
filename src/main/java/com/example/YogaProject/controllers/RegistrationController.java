@@ -36,19 +36,13 @@ public class RegistrationController {
     public String createUser(@Valid User user,
                              BindingResult bindingResult,
                              Model model) {
-        if (bindingResult.hasErrors() || !userService.createUserValidation(user, bindingResult)) {
+
+        if (bindingResult.hasErrors() || !userService.createUserValidation(user, bindingResult)
+                || !userService.passwordConfirm(user, bindingResult)) {
             model.addAttribute("roles", Role.values());
             return "registration";
         }
-        if(!user.getPassword().equals(user.getPasswordConfirm())) {
-            bindingResult.addError(new FieldError(
-                    "user",
-                    "passwordConfirm",
-                    "Check password and password confirm - it needs to be equal!"));
-            return "registration";
-        }
-        user.getRoles().add(Role.ROLE_USER);
-        if (!userService.isUserExists()) {
+        if (!userService.isUsersExists()) {
             user.getRoles().add(Role.ROLE_ADMIN);
         }
         userService.saveUser(user);

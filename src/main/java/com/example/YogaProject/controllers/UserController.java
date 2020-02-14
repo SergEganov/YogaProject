@@ -4,7 +4,6 @@ import com.example.YogaProject.domain.Role;
 import com.example.YogaProject.domain.User;
 import com.example.YogaProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -34,32 +32,6 @@ public class UserController {
         model.addAttribute("users", users);
         return "/users/users";
     }
-
-    /*@GetMapping("/create-user")
-    public String createUserForm(Model model,
-                                 @AuthenticationPrincipal User user){
-        if (user != null && user.getRoles().contains(Role.ADMIN)) {
-            model.addAttribute("admin", true);
-        }
-        model.addAttribute("user", new User());
-        model.addAttribute("roles", Role.values());
-        return "/users/create-user";
-    }
-
-    @PostMapping("/create-user")
-    public String createUser(@Valid User user,
-                             BindingResult bindingResult,
-                             Model model) {
-        if (bindingResult.hasErrors() || !userService.createUserValidation(user, bindingResult)) {
-            model.addAttribute("roles", Role.values());
-            return "/users/create-user";
-        }
-        if (user.getRoles().isEmpty()) {
-            user.setRoles(Collections.singleton(Role.USER));
-        }
-        userService.saveUser(user);
-        return "redirect:/main";
-    }*/
 
     @GetMapping("delete-user/{id}")
     public String deleteUser(@PathVariable("id") Long id) {

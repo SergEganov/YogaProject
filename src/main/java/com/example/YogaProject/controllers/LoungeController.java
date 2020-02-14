@@ -28,7 +28,7 @@ public class LoungeController {
         this.activityTypeService = activityTypeService;
     }
 
-    @GetMapping()
+    @GetMapping
     public String getLounges(Model model){
         List<Lounge> lounges = loungeService.findAll();
         model.addAttribute("lounges", lounges);
@@ -46,14 +46,12 @@ public class LoungeController {
     public String createLounge(@Valid Lounge lounge,
                                BindingResult bindingResult,
                                Model model){
-        if (loungeService.createLoungeValidation(lounge, bindingResult)) {
-            loungeService.save(lounge);
-            return "redirect:/lounges";
-        } else {
+        if (bindingResult.hasErrors() || !loungeService.createLoungeValidation(lounge, bindingResult)) {
             model.addAttribute("activityTypes", activityTypeService.findAll());
             return "lounge/create-lounge";
         }
-
+            loungeService.save(lounge);
+            return "redirect:/lounges";
     }
 
     @GetMapping("/delete-lounge/{id}")
@@ -74,12 +72,12 @@ public class LoungeController {
     public String updateLounge(@Valid Lounge lounge,
                                BindingResult bindingResult,
                                Model model){
-        if (loungeService.updateLoungeValidation(lounge, bindingResult)) {
-            loungeService.save(lounge);
-            return "redirect:/lounges";
-        } else {
+        if (bindingResult.hasErrors() || !loungeService.updateLoungeValidation(lounge, bindingResult)) {
             model.addAttribute("activityTypes", activityTypeService.findAll());
             return "lounge/update-lounge";
+        } else {
+            loungeService.save(lounge);
+            return "redirect:/lounges";
         }
     }
 }

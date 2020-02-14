@@ -40,13 +40,11 @@ public class ActivityTypeController {
 
     @PostMapping("/create-activityType")
     public String createActivityType(@Valid ActivityType activityType, BindingResult bindingResult){
-        if(activityTypeService.activityTypeValidation(activityType,bindingResult)) {
-            activityType.setAvailable(true);
-            activityTypeService.saveActivityType(activityType);
-            return "redirect:/activity-types";
-        } else {
+        if(bindingResult. hasErrors() || !activityTypeService.activityTypeValidation(activityType,bindingResult)) {
             return "activityType/create-activityType";
         }
+        activityTypeService.saveActivityType(activityType);
+        return "redirect:/activity-types";
     }
 
     @GetMapping("/delete-activityType/{id}")
@@ -65,11 +63,10 @@ public class ActivityTypeController {
     @PostMapping("/update-activityType")
     public String updateActivityType(@Valid ActivityType activityType,
                                      BindingResult bindingResult){
-        if(activityTypeService.activityTypeValidation(activityType,bindingResult)) {
-            activityTypeService.saveActivityType(activityType);
-            return "redirect:/activity-types";
-        } else {
+        if(bindingResult.hasErrors() || !activityTypeService.activityTypeValidation(activityType,bindingResult)) {
             return "activityType/update-activityType";
         }
+        activityTypeService.saveActivityType(activityType);
+        return "redirect:/activity-types";
     }
 }

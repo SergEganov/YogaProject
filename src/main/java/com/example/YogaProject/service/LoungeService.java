@@ -33,11 +33,10 @@ public class LoungeService {
     }
 
     public Lounge findById(Long id) {
-        return loungeRepo.getOne(id);
+        return loungeRepo.findById(id).orElse(null);
     }
 
-
-    private Boolean checkLoungeExist(Lounge lounge) {
+    private boolean checkLoungeExist(Lounge lounge) {
         Lounge loungeFromDb = loungeRepo.findByName(lounge.getName());
         return loungeFromDb != null;
     }
@@ -48,11 +47,12 @@ public class LoungeService {
                     "lounge",
                     "name",
                     "Lounge with name: " + lounge.getName() + " is exist!"));
+            return false;
         }
-        return !bindingResult.hasErrors();
+        return true;
     }
 
-    public Boolean updateLoungeValidation(Lounge lounge, BindingResult bindingResult) {
+    public boolean updateLoungeValidation(Lounge lounge, BindingResult bindingResult) {
         if(checkLoungeExist(lounge)){
             Lounge loungeFromDb = loungeRepo.findByName(lounge.getName());
             if (!loungeFromDb.getId().equals(lounge.getId())) {
@@ -60,8 +60,9 @@ public class LoungeService {
                         "lounge",
                         "name",
                         "Lounge with name: " + lounge.getName() + " is exist!"));
+                return false;
             }
         }
-        return !bindingResult.hasErrors();
+        return true;
     }
 }

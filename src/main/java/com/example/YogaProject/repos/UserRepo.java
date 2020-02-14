@@ -9,9 +9,9 @@ import java.util.Set;
 
 public interface UserRepo extends JpaRepository <User, Long> {
     User findByEmail(String email);
-    User findByLastName(String lastName);
     Set<User> findByRolesContains(Role role);
 
     @Query(value = "SELECT EXISTS (SELECT NULL FROM usrs)", nativeQuery = true)
-    boolean isUserExists();
+    boolean isUsersExists();
 }
+
